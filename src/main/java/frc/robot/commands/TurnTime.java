@@ -11,15 +11,16 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class DriveTime extends CommandBase {
+public class TurnTime extends CommandBase {
   private final DriveSubsystem m_drive;
   private final double m_time;
   private final double m_speed;
   private final Timer m_timer = new Timer();
+  
   /**
-   * Creates a new DriveTime.
+   * Creates a new TurnTime.
    */
-  public DriveTime(double time, double speed, DriveSubsystem drive) {
+  public TurnTime(double time, double speed, DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_time = time;
@@ -38,14 +39,13 @@ public class DriveTime extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(m_speed, 0);
+    m_drive.arcadeDrive(0, m_speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_drive.stopDrive();
-    m_timer.stop();
   }
 
   // Returns true when the command should end.

@@ -7,50 +7,42 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ColorSensor;
 
-public class DriveTime extends CommandBase {
-  private final DriveSubsystem m_drive;
-  private final double m_time;
-  private final double m_speed;
-  private final Timer m_timer = new Timer();
+public class GetColorName extends CommandBase {
+  private final ColorSensor m_color;
+
   /**
-   * Creates a new DriveTime.
+   * Creates a new GetColorName.
    */
-  public DriveTime(double time, double speed, DriveSubsystem drive) {
+  public GetColorName(ColorSensor color) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drive = drive;
-    m_time = time;
-    m_speed = speed;
-    addRequirements(m_drive);
+    m_color = color;
+    addRequirements(m_color);
   }
 
-  // Called when the command is initially scheduled.
+// Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.stopDrive();
-    m_timer.reset();
-    m_timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(m_speed, 0);
+    SmartDashboard.putString("Color", m_color.printColorSensor());
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.stopDrive();
-    m_timer.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_timer.hasPeriodPassed(m_time);
+    return false;
   }
 }
