@@ -19,11 +19,14 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveTime;
 import frc.robot.commands.GetColorName;
-import frc.robot.commands.AutonThint;
+import frc.robot.commands.AutonThing;
+import frc.robot.commands.CoolAutonWithLights;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.HalveDriveSpeed;
+import frc.robot.commands.TeleOPLights;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Underglow;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -35,11 +38,13 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ColorSensor m_color = new ColorSensor();
+  private final Underglow m_glow = new Underglow();
 
   // the stuff for auton
   // Auto that just drives for a few seconds and stops
   private final Command m_driveAuto = new DriveTime(AutoConstants.kAutoDriveDistanceSeconds, AutoConstants.kAutoDriveSpeed, m_robotDrive);
-  private final Command m_complexAuto = new AutonThint(m_robotDrive);
+  private final Command m_complexAuto = new AutonThing(m_robotDrive);
+  private final Command m_lightBoi = new CoolAutonWithLights(m_glow, m_robotDrive);
 
   // Auto that does nothing
   private final Command m_nothingAuto = new WaitCommand(15);
@@ -60,10 +65,12 @@ public class RobotContainer {
     // Sets the default commands
     m_robotDrive.setDefaultCommand(new DefaultDrive(m_robotDrive,() -> -m_driverController.getY(GenericHID.Hand.kLeft),() -> m_driverController.getX(GenericHID.Hand.kLeft)));
     m_color.setDefaultCommand(new GetColorName(m_color));
+    m_glow.setDefaultCommand(new TeleOPLights(m_glow));
 
     // Add Commands to the auton command chooser
     m_chooser.setDefaultOption("Drive Auto", m_driveAuto);
     m_chooser.addOption("Cool boi", m_complexAuto);
+    m_chooser.addOption("Lights", m_lightBoi);
     m_chooser.addOption("Do Nothing", m_nothingAuto);
 
     // Put the chooser on the dashboard

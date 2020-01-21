@@ -24,8 +24,12 @@ public final class Constants {
     }
 
     public static final class AutoConstants{
-        public static final double kAutoDriveSpeed = .5;
+        public static final double kAutoDriveSpeed = .75;
         public static final double kAutoDriveDistanceSeconds = 4;
+    }
+
+    public static final class BlinkinConstants{
+        public static final int kBlinkinPWM = 0;
     }
 
     public static final class OIConstants{
