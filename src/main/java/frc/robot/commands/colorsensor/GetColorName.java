@@ -5,24 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.colorsensor;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ColorSensor;
 
-public class PrintColor extends CommandBase {
+public class GetColorName extends CommandBase {
   private final ColorSensor m_color;
 
   /**
-   * Creates a new PrintColor.
+   * Creates a new GetColorName.
    */
-  public PrintColor(ColorSensor color) {
+  public GetColorName(ColorSensor color) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_color = color;
     addRequirements(m_color);
   }
 
-  // Called when the command is initially scheduled.
+// Called when the command is initially scheduled.
   @Override
   public void initialize() {
   }
@@ -30,7 +31,8 @@ public class PrintColor extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_color.printColorSensor();
+    SmartDashboard.putString("Color", m_color.printColorSensor());
+    
   }
 
   // Called once the command ends or is interrupted.

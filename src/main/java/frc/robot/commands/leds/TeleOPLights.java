@@ -5,52 +5,43 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.leds;
 
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Underglow;
 
-public class TurnTime extends CommandBase {
-  private final DriveSubsystem m_drive;
-  private final double m_time;
-  private final double m_speed;
-  private final Timer m_timer = new Timer();
-  
+public class TeleOPLights extends CommandBase {
+  private final Underglow m_glow;
+
   /**
-   * Creates a new TurnTime.
+   * Creates a new TeleOPLights.
    */
-  public TurnTime(double time, double speed, DriveSubsystem drive) {
+  public TeleOPLights(Underglow glow) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drive = drive;
-    m_time = time;
-    m_speed = speed;
-    addRequirements(m_drive);
+    m_glow = glow;
+    addRequirements(m_glow);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.stopDrive();
-    m_timer.reset();
-    m_timer.start();
+    m_glow.setColorTeleOP(DriverStation.getInstance().getAlliance());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(0, m_speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.stopDrive();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_timer.hasPeriodPassed(m_time);
+    return false;
   }
 }

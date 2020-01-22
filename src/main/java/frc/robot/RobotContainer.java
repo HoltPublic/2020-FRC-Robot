@@ -15,15 +15,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.DriveTime;
-import frc.robot.commands.GetColorName;
-import frc.robot.commands.AutonThing;
-import frc.robot.commands.CoolAutonWithLights;
-import frc.robot.commands.DefaultDrive;
-import frc.robot.commands.HalveDriveSpeed;
-import frc.robot.commands.TeleOPLights;
+
+import frc.robot.commands.drive.DefaultDrive;
+import frc.robot.commands.drive.DriveTime;
+import frc.robot.commands.drive.HalveDriveSpeed;
+
+
+import frc.robot.commands.auto.AutonThing;
+import frc.robot.commands.auto.CoolAutonWithLights;
+
+import frc.robot.commands.leds.TeleOPLights;
+import frc.robot.commands.colorsensor.GetColorName;
+
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Underglow;

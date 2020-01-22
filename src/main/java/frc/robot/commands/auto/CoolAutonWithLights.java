@@ -5,24 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.auto;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.commands.leds.AutonLights;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Underglow;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutonThing extends SequentialCommandGroup {
+public class CoolAutonWithLights extends ParallelCommandGroup {
   /**
-   * Creates a new AutonThint.
+   * Creates a new CoolAutonWithLights.
    */
-  public AutonThing(DriveSubsystem m_drive) {
+  public CoolAutonWithLights(Underglow glow, DriveSubsystem drive) {
     // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());
-    super(
-      new DriveTime(3, .5, m_drive),
-      new TurnTime(3, .5, m_drive),
-      new DriveTime(3, .5, m_drive));
+    // super(new FooCommand(), new BarCommand());super();
+    super(new AutonLights(glow), new AutonThing(drive));
   }
 }

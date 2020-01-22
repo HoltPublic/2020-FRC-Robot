@@ -5,25 +5,30 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ColorSensor;
+import frc.robot.subsystems.DriveSubsystem;
 
-public class GetColorName extends CommandBase {
-  private final ColorSensor m_color;
+public class DefaultDrive extends CommandBase {
+  private final DriveSubsystem m_drive;
+  private final DoubleSupplier m_forward;
+  private final DoubleSupplier m_rotation;
 
   /**
-   * Creates a new GetColorName.
+   * Creates a new DefaultDrive.
    */
-  public GetColorName(ColorSensor color) {
+  public DefaultDrive(DriveSubsystem subsystem, DoubleSupplier forward, DoubleSupplier rotation) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_color = color;
-    addRequirements(m_color);
+    m_drive = subsystem;
+    m_forward = forward;
+    m_rotation = rotation;
+    addRequirements(m_drive);
   }
 
-// Called when the command is initially scheduled.
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
   }
@@ -31,13 +36,13 @@ public class GetColorName extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putString("Color", m_color.printColorSensor());
-    
+    m_drive.arcadeDrive(m_forward.getAsDouble(), m_rotation.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_drive.arcadeDrive(0, 0);
   }
 
   // Returns true when the command should end.

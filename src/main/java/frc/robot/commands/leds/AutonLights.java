@@ -5,26 +5,28 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.leds;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Underglow;
 
-public class HalveDriveSpeed extends CommandBase {
-  private final DriveSubsystem m_drive;
+public class AutonLights extends CommandBase {
+  private final Underglow m_glow;
 
   /**
-   * Creates a new HalveDriveSpeed.
+   * Creates a new AutonLights.
    */
-  public HalveDriveSpeed(DriveSubsystem drive) {
+  public AutonLights(Underglow glow) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drive = drive;
+    m_glow = glow;
+    addRequirements(m_glow);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.setMaxOutput(0.5);
+    m_glow.setColorAuton(DriverStation.getInstance().getAlliance());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,12 +37,11 @@ public class HalveDriveSpeed extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.setMaxOutput(1);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return !DriverStation.getInstance().isAutonomous();
   }
 }
