@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BlinkinConstants;;
 
@@ -39,6 +40,18 @@ public class Underglow extends SubsystemBase {
       m_blinkin.set(-0.11);
     }else{
       m_blinkin.set(-0.05);
+    }
+  }
+
+  public void setColorWheelColor(Color color){
+    if(color == Color.kBlue){
+      m_blinkin.set(-0.09);
+    } else if(color == Color.kGreen){
+      m_blinkin.set(0.77);
+    } else if(color == Color.kRed){
+      m_blinkin.set(0.61);
+    } else if(color == Color.kYellow){
+      m_blinkin.set(0.69);
     }
   }
 

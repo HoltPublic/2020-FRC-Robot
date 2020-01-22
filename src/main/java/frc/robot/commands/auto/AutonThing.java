@@ -8,6 +8,7 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.drive.DriveTime;
 import frc.robot.commands.drive.TurnTime;
 import frc.robot.subsystems.DriveSubsystem;
@@ -23,8 +24,8 @@ public class AutonThing extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-      new DriveTime(3, .5, m_drive),
-      new TurnTime(3, .5, m_drive),
-      new DriveTime(3, .5, m_drive));
+      new DriveTime(AutoConstants.kAutoDriveDistanceSeconds, AutoConstants.kAutoDriveSpeed, m_drive),
+      new TurnTime(AutoConstants.kAutoDriveDistanceSeconds, AutoConstants.kAutoDriveSpeed, m_drive),
+      new DriveTime(AutoConstants.kAutoDriveDistanceSeconds, AutoConstants.kAutoDriveSpeed, m_drive));
   }
 }

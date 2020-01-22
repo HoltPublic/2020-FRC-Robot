@@ -24,7 +24,7 @@ public final class Constants {
     }
 
     public static final class AutoConstants{
-        public static final double kAutoDriveSpeed = .75;
+        public static final double kAutoDriveSpeed = .5;
         public static final double kAutoDriveDistanceSeconds = 4;
     }
 

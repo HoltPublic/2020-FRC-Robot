@@ -8,16 +8,17 @@
 package frc.robot.commands.leds;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Underglow;
 
-public class TeleOPLights extends CommandBase {
+public class ColorWheelLights extends CommandBase {
   private final Underglow m_glow;
-
+  private String gameData;
   /**
-   * Creates a new TeleOPLights.
+   * Creates a new ColorWheelLights.
    */
-  public TeleOPLights(Underglow glow) {
+  public ColorWheelLights(Underglow glow) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_glow = glow;
     addRequirements(m_glow);
@@ -26,12 +27,23 @@ public class TeleOPLights extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_glow.setColorTeleOP(DriverStation.getInstance().getAlliance());
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
+    if(gameData.length() > 0){
+      switch(gameData.charAt(0)){
+        case 'B' : m_glow.setColorWheelColor(Color.kBlue); break;
+        case 'G' : m_glow.setColorWheelColor(Color.kGreen); break;
+        case 'R' : m_glow.setColorWheelColor(Color.kRed); break;
+        case 'Y' : m_glow.setColorWheelColor(Color.kYellow); break;
+      }
+    } else{
+      new TeleOPLights(m_glow);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -42,6 +54,6 @@ public class TeleOPLights extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
