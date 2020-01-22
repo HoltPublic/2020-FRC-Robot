@@ -42,7 +42,7 @@ public class ColorWheelLights extends CommandBase {
         case 'Y' : m_glow.setColorWheelColor(Color.kYellow); break;
       }
     } else{
-      new TeleOPLights(m_glow);
+      m_glow.setColorTeleOP(DriverStation.getInstance().getAlliance());
     }
   }
 
