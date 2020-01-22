@@ -12,13 +12,13 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Underglow;
 
-public class ColorWheelLights extends CommandBase {
+public class TeleOPLights extends CommandBase {
   private final Underglow m_glow;
   private String gameData;
   /**
-   * Creates a new ColorWheelLights.
+   * Creates a new TeleOPLights.
    */
-  public ColorWheelLights(Underglow glow) {
+  public TeleOPLights(Underglow glow) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_glow = glow;
     addRequirements(m_glow);

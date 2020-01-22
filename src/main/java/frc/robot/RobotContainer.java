@@ -25,7 +25,7 @@ import frc.robot.commands.drive.HalveDriveSpeed;
 
 import frc.robot.commands.auto.AutonThing;
 import frc.robot.commands.auto.CoolAutonWithLights;
-import frc.robot.commands.leds.ColorWheelLights;
+import frc.robot.commands.leds.TeleOPLights;
 import frc.robot.commands.colorsensor.GetColorName;
 
 import frc.robot.subsystems.ColorSensor;
@@ -69,7 +69,7 @@ public class RobotContainer {
     // Sets the default commands
     m_robotDrive.setDefaultCommand(new DefaultDrive(m_robotDrive,() -> -m_driverController.getY(GenericHID.Hand.kLeft),() -> m_driverController.getX(GenericHID.Hand.kLeft)));
     m_color.setDefaultCommand(new GetColorName(m_color));
-    m_glow.setDefaultCommand(new ColorWheelLights(m_glow));
+    m_glow.setDefaultCommand(new TeleOPLights(m_glow));
 
     // Add Commands to the auton command chooser
     m_chooser.setDefaultOption("Drive Auto", m_driveAuto);
