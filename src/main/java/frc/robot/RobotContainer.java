@@ -13,17 +13,13 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 
 import frc.robot.commands.drive.DefaultDrive;
-import frc.robot.commands.drive.DriveTime;
 import frc.robot.commands.drive.HalveDriveSpeed;
 
-import frc.robot.commands.auto.AutonThing;
 import frc.robot.commands.auto.CoolAutonWithLights;
 import frc.robot.commands.auto.SimpleDriveWithLights;
 import frc.robot.commands.leds.AutonLights;
