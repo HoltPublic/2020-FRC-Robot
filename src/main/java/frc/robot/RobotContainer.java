@@ -25,6 +25,8 @@ import frc.robot.commands.drive.HalveDriveSpeed;
 
 import frc.robot.commands.auto.AutonThing;
 import frc.robot.commands.auto.CoolAutonWithLights;
+import frc.robot.commands.auto.SimpleDriveWithLights;
+import frc.robot.commands.leds.AutonLights;
 import frc.robot.commands.leds.TeleOPLights;
 import frc.robot.commands.colorsensor.GetColorName;
 
@@ -46,12 +48,11 @@ public class RobotContainer {
 
   // the stuff for auton
   // Auto that just drives for a few seconds and stops
-  private final Command m_driveAuto = new DriveTime(AutoConstants.kAutoDriveDistanceSeconds, AutoConstants.kAutoDriveSpeed, m_robotDrive);
-  private final Command m_complexAuto = new AutonThing(m_robotDrive);
-  private final Command m_lightBoi = new CoolAutonWithLights(m_glow, m_robotDrive);
+  private final Command m_driveAuto = new SimpleDriveWithLights(m_glow, m_robotDrive);
+  private final Command m_complexAuto = new CoolAutonWithLights(m_glow, m_robotDrive);
 
   // Auto that does nothing
-  private final Command m_nothingAuto = new WaitCommand(15);
+  private final Command m_nothingAuto = new AutonLights(m_glow);
 
   // A chooser for auto commands
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -74,7 +75,6 @@ public class RobotContainer {
     // Add Commands to the auton command chooser
     m_chooser.setDefaultOption("Drive Auto", m_driveAuto);
     m_chooser.addOption("Cool boi", m_complexAuto);
-    m_chooser.addOption("Lights", m_lightBoi);
     m_chooser.addOption("Do Nothing", m_nothingAuto);
 
     // Put the chooser on the dashboard
