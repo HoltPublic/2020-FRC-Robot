@@ -8,7 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.InvertType;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,12 +16,12 @@ import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
   // Motors on the Right Side
-  private final WPI_VictorSPX m_rightMasterMotor = new WPI_VictorSPX(DriveConstants.kRightMotor1Port);
-  private final WPI_VictorSPX m_rightSlaveMotor = new WPI_VictorSPX(DriveConstants.kRightMotor2Port);
+  private final WPI_TalonFX m_rightMasterMotor = new WPI_TalonFX(DriveConstants.kRightMotor1Port);
+  private final WPI_TalonFX m_rightSlaveMotor = new WPI_TalonFX(DriveConstants.kRightMotor2Port);
 
   // Motors on the Left Side
-  private final WPI_VictorSPX m_leftMasterMotor = new WPI_VictorSPX(DriveConstants.kLeftMotor1Port);
-  private final WPI_VictorSPX m_leftSlaveMotor = new WPI_VictorSPX(DriveConstants.kLeftMotor2Port);
+  private final WPI_TalonFX m_leftMasterMotor = new WPI_TalonFX(DriveConstants.kLeftMotor1Port);
+  private final WPI_TalonFX m_leftSlaveMotor = new WPI_TalonFX(DriveConstants.kLeftMotor2Port);
 
   // The Robot's Drive
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMasterMotor, m_rightMasterMotor);

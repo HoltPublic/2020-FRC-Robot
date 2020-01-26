@@ -23,7 +23,7 @@ public class GetColorName extends CommandBase {
     addRequirements(m_color);
   }
 
-// Called when the command is initially scheduled.
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
   }

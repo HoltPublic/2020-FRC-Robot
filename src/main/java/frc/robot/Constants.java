@@ -35,4 +35,11 @@ public final class Constants {
     public static final class OIConstants{
         public static final int kDriverControllerPort = 1;
     }
+
+    public static final class PneumaticsConstants{
+        public static final int kPCMCANID = 1;
+        public static final int kTalonFXCooler = 1;
+        public static final int kPneumaticsCoolTimeOutSeconds = 4;
+        public static final int kPneumaticsCoolWaitSeconds = 10;
+    }
 }
