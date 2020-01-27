@@ -23,10 +23,12 @@ import frc.robot.commands.auto.CoolAutonWithLights;
 import frc.robot.commands.auto.SimpleDriveWithLights;
 import frc.robot.commands.leds.AutonLights;
 import frc.robot.commands.leds.TeleOPLights;
+import frc.robot.commands.pneumatics.CoolFalcons;
 import frc.robot.commands.colorsensor.GetColorName;
 
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Underglow;
 
 /**
@@ -40,6 +42,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ColorSensor m_color = new ColorSensor();
   private final Underglow m_glow = new Underglow();
+  private final Pneumatics m_talonCooler = new Pneumatics();
 
   // the stuff for auton
   // Auto that just drives for a few seconds and stops
@@ -66,6 +69,7 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(new DefaultDrive(m_robotDrive,() -> -m_driverController.getY(GenericHID.Hand.kLeft),() -> m_driverController.getX(GenericHID.Hand.kLeft)));
     m_color.setDefaultCommand(new GetColorName(m_color));
     m_glow.setDefaultCommand(new TeleOPLights(m_glow));
+    m_talonCooler.setDefaultCommand(new CoolFalcons(m_talonCooler));
 
     // Add Commands to the auton command chooser
     m_chooser.setDefaultOption("Drive Auto", m_driveAuto);

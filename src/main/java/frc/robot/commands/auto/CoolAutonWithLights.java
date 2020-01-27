@@ -22,6 +22,6 @@ public class CoolAutonWithLights extends ParallelCommandGroup {
   public CoolAutonWithLights(Underglow glow, DriveSubsystem drive) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());super();
-    super(new AutonLights(glow), new AutonThing(drive));
+    super(new AutonLights(glow), new DriveSpinDrive(drive));
   }
 }
