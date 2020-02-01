@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
@@ -26,6 +27,8 @@ public class Lift extends SubsystemBase {
 
     m_climbMotor.setInverted(false);
     m_telescope.setInverted(false);
+
+    m_telescope.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
   @Override

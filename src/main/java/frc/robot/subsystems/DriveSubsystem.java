@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -46,6 +47,9 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftMasterMotor.setInverted(false);
     m_leftSlaveMotor.setInverted(InvertType.FollowMaster);
 
+    m_rightMasterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    m_leftMasterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+
     m_drive.setRightSideInverted(true);
   }
 
@@ -62,6 +66,23 @@ public class DriveSubsystem extends SubsystemBase {
   // Stops the robot
   public void stopDrive(){
     m_drive.stopMotor();
+  }
+
+  public double getDistance(){
+    return (getRightDistance() + getLeftDistance()) / 2;
+  }
+
+  public double getRightDistance(){
+    return ((m_rightMasterMotor.getSelectedSensorPosition() / DriveConstants.kEncoderCPR) * DriveConstants.kEncoderDistancePerPulse) / DriveConstants.kGearRatio;
+  }
+
+  public double getLeftDistance(){
+    return ((m_leftMasterMotor.getSelectedSensorPosition() / DriveConstants.kEncoderCPR) * DriveConstants.kEncoderDistancePerPulse) / DriveConstants.kGearRatio;
+  }
+
+  public void resetEncoders(){
+    m_rightMasterMotor.setSelectedSensorPosition(0);
+    m_leftMasterMotor.setSelectedSensorPosition(0);
   }
 
   @Override

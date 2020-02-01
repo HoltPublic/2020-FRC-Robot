@@ -21,11 +21,17 @@ public final class Constants {
         public static final int kLeftMotor2Port = 2;
         public static final int kRightMotor1Port = 3;
         public static final int kRightMotor2Port = 4;
+
+        public static final int kEncoderCPR = 2048;
+        public static final double kWheelDiameterInches = 6;
+        public static final double kEncoderDistancePerPulse = (kWheelDiameterInches * Math.PI) / kEncoderCPR;
+        public static final double kGearRatio = 10.75;
     }
 
     public static final class AutoConstants{
         public static final double kAutoDriveSpeed = .5;
         public static final double kAutoDriveDistanceSeconds = 4;
+        public static final double kAutoDriveDistanceInches = 120;
     }
 
     public static final class BlinkinConstants{
