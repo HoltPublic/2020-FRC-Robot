@@ -37,9 +37,16 @@ public final class Constants {
     }
 
     public static final class PneumaticsConstants{
-        public static final int kPCMCANID = 1;
-        public static final int kTalonFXCooler = 1;
-        public static final int kPneumaticsCoolTimeOutSeconds = 4;
-        public static final int kPneumaticsCoolWaitSeconds = 10;
+        public static final int kBallStopperForward = 0;
+        public static final int kBallStopperBackward = 1;
+    }
+
+    public static final class LiftConstants{
+        public static final int kClimbMotor = 5;
+        public static final int kTelescopeMotor = 6;
+    }
+
+    public static final class IntakeConstants{
+        public static final int kBeltMotor = 7;
     }
 }

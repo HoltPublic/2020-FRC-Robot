@@ -7,30 +7,23 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.PneumaticsConstants;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
-public class Pneumatics extends SubsystemBase {
-  private final Compressor m_compressor = new Compressor();
-  private final DoubleSolenoid m_ballStopper = new DoubleSolenoid(PneumaticsConstants.kBallStopperForward, PneumaticsConstants.kBallStopperBackward);
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
+
+public class Intake extends SubsystemBase {
+  private final WPI_VictorSPX m_BeltIntake = new WPI_VictorSPX(IntakeConstants.kBeltMotor);
 
   /**
-   * Creates a new Pneumatics.
+   * Creates a new Intake.
    */
-  public Pneumatics() {
-    m_compressor.setClosedLoopControl(true);
+  public Intake() {
+    m_BeltIntake.configFactoryDefault();
+
+    m_BeltIntake.setInverted(false);
   }
 
-  public void stopBalls(){
-    m_ballStopper.set(Value.kForward);
-  }
-
-  public void goBalls(){
-    m_ballStopper.set(Value.kReverse);
-  }
 
   @Override
   public void periodic() {

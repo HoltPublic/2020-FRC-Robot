@@ -7,29 +7,25 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.PneumaticsConstants;
 
-public class Pneumatics extends SubsystemBase {
-  private final Compressor m_compressor = new Compressor();
-  private final DoubleSolenoid m_ballStopper = new DoubleSolenoid(PneumaticsConstants.kBallStopperForward, PneumaticsConstants.kBallStopperBackward);
+import frc.robot.Constants.LiftConstants;
 
+public class Lift extends SubsystemBase {
+  private final WPI_VictorSPX m_climbMotor = new WPI_VictorSPX(LiftConstants.kClimbMotor);
+  private final WPI_TalonSRX m_telescope = new WPI_TalonSRX(LiftConstants.kTelescopeMotor);
   /**
-   * Creates a new Pneumatics.
+   * Creates a new Lift.
    */
-  public Pneumatics() {
-    m_compressor.setClosedLoopControl(true);
-  }
+  public Lift() {
+    m_climbMotor.configFactoryDefault();
+    m_telescope.configFactoryDefault();
 
-  public void stopBalls(){
-    m_ballStopper.set(Value.kForward);
-  }
-
-  public void goBalls(){
-    m_ballStopper.set(Value.kReverse);
+    m_climbMotor.setInverted(false);
+    m_telescope.setInverted(false);
   }
 
   @Override

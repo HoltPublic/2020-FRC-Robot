@@ -5,52 +5,41 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.pneumatics;
+package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.PneumaticsConstants;
-import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.Intake;
 
-public class CoolFalcons extends CommandBase {
-  private final Pneumatics m_blow;
-  private final Timer m_timerForLooping = new Timer();
-  private final Timer m_timerForCooling = new Timer();
+public class SpitOut extends CommandBase {
+  private final Intake m_intake;
+
   /**
-   * Creates a new CoolFalcons.
+   * Creates a new SpitOut.
    */
-  public CoolFalcons(Pneumatics blow) {
+  public SpitOut(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_blow = blow;
-    addRequirements(m_blow);
+    m_intake = intake;
+    addRequirements(m_intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_timerForLooping.reset();
-    m_timerForLooping.start();
-    m_timerForCooling.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_timerForLooping.hasPeriodPassed(PneumaticsConstants.kPneumaticsCoolWaitSeconds)){
-      m_blow.startCooling();
-      m_timerForCooling.start();
-    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_blow.stopCooling();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_timerForCooling.hasPeriodPassed(PneumaticsConstants.kPneumaticsCoolTimeOutSeconds);
+    return false;
   }
 }
