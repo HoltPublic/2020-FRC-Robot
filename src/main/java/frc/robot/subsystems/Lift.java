@@ -31,6 +31,34 @@ public class Lift extends SubsystemBase {
     m_telescope.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
+  public void raiseTelescope(){
+    m_telescope.set(1);
+  }
+
+  public void lowerelescope(){
+    m_telescope.set(-1);
+  }
+
+  public void stopTelescope(){
+    m_telescope.set(0);
+  }
+
+  public void resetEncoder(){
+    m_telescope.setSelectedSensorPosition(0);
+  }
+
+  public double getRotation(){
+    return m_telescope.getSelectedSensorPosition() / LiftConstants.kEncoderCPR;
+  }
+
+  public void startWinch(){
+    m_climbMotor.set(1);
+  }
+
+  public void stopWinch(){
+    m_climbMotor.set(0);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

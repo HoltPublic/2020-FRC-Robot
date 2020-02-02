@@ -14,6 +14,7 @@ import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
   private final WPI_VictorSPX m_BeltIntake = new WPI_VictorSPX(IntakeConstants.kBeltMotor);
+  double maxSpeed = 0.6;
 
   /**
    * Creates a new Intake.
@@ -24,6 +25,17 @@ public class Intake extends SubsystemBase {
     m_BeltIntake.setInverted(false);
   }
 
+  public void intakeTheBalls(){
+    m_BeltIntake.set(maxSpeed);
+  }
+
+  public void spitTheBalls(){
+    m_BeltIntake.set(-maxSpeed);
+  }
+
+  public void stopMotor(){
+    m_BeltIntake.set(0);
+  }
 
   @Override
   public void periodic() {

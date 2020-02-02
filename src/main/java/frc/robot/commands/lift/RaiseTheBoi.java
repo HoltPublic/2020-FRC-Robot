@@ -5,38 +5,37 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.lift;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lift;
 
-public class SuckIn extends CommandBase {
-private final Intake m_intake;
-
+public class RaiseTheBoi extends CommandBase {
+  private final Lift m_lift;
   /**
-   * Creates a new Suckin.
+   * Creates a new RaiseTheBoi.
    */
-  public SuckIn(Intake intake) {
+  public RaiseTheBoi(Lift lift) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_intake = intake;
-    addRequirements(m_intake);
+    m_lift = lift;
+    addRequirements(m_lift);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intake.intakeTheBalls();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_lift.startWinch();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.stopMotor();
+    m_lift.stopWinch();
   }
 
   // Returns true when the command should end.

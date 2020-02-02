@@ -8,6 +8,7 @@
 package frc.robot.commands.lift;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.LiftConstants;
 import frc.robot.subsystems.Lift;
 
 public class LightSaberUp extends CommandBase {
@@ -25,21 +26,24 @@ public class LightSaberUp extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_lift.resetEncoder();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_lift.raiseTelescope();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_lift.stopTelescope();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(m_lift.getRotation()) >= LiftConstants.kRotationsToGoUp;
   }
 }

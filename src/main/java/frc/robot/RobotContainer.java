@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -19,15 +20,20 @@ import frc.robot.Constants.OIConstants;
 
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.commands.drive.HalveDriveSpeed;
+import frc.robot.commands.intake.SpitOut;
+import frc.robot.commands.intake.SuckIn;
 import frc.robot.commands.auto.CoolAutonWithLights;
 import frc.robot.commands.auto.SimpleDriveWithLights;
 import frc.robot.commands.leds.AutonLights;
 import frc.robot.commands.leds.TeleOPLights;
+import frc.robot.commands.lift.RaiseTheBoi;
 import frc.robot.commands.pneumatics.BallPistion;
 import frc.robot.commands.colorsensor.GetColorName;
 
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Underglow;
 
@@ -43,6 +49,8 @@ public class RobotContainer {
   private final ColorSensor m_color = new ColorSensor();
   private final Underglow m_glow = new Underglow();
   private final Pneumatics m_blow = new Pneumatics();
+  private final Intake m_intake = new Intake();
+  private final Lift m_lift = new Lift();
 
   // the stuff for auton
   // Auto that just drives for a few seconds and stops
@@ -57,6 +65,7 @@ public class RobotContainer {
 
   // Controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  Joystick m_operatorController = new Joystick(OIConstants.kOperatorContollerPort);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -88,7 +97,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // While holding the Shoulder Button drive slow
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new HalveDriveSpeed(m_robotDrive));
-    new JoystickButton(m_driverController, Button.kB.value).whenHeld(new BallPistion(m_blow));
+    
+    new JoystickButton(m_operatorController, 0).whenHeld(new BallPistion(m_blow));
+    new JoystickButton(m_operatorController, 5).whenHeld(new SuckIn(m_intake));
+    new JoystickButton(m_operatorController, 4).whenHeld(new SpitOut(m_intake));
+    new JoystickButton(m_operatorController, 15).whenHeld(new RaiseTheBoi(m_lift));
   }
 
 

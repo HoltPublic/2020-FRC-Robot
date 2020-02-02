@@ -39,7 +39,8 @@ public final class Constants {
     }
 
     public static final class OIConstants{
-        public static final int kDriverControllerPort = 1;
+        public static final int kDriverControllerPort = 0;
+        public static final int kOperatorContollerPort = 1;
     }
 
     public static final class PneumaticsConstants{
@@ -50,6 +51,9 @@ public final class Constants {
     public static final class LiftConstants{
         public static final int kClimbMotor = 5;
         public static final int kTelescopeMotor = 6;
+
+        public static final int kEncoderCPR = 2048;
+        public static final double kRotationsToGoUp = 10;
     }
 
     public static final class IntakeConstants{
