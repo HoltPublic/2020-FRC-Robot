@@ -32,7 +32,6 @@ public class GetColorName extends CommandBase {
   @Override
   public void execute() {
     SmartDashboard.putString("Color", m_color.printColorSensor());
-    
   }
 
   // Called once the command ends or is interrupted.

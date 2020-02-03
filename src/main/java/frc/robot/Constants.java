@@ -24,8 +24,8 @@ public final class Constants {
 
         public static final int kEncoderCPR = 2048;
         public static final double kWheelDiameterInches = 6;
-        public static final double kEncoderDistancePerPulse = (kWheelDiameterInches * Math.PI) / kEncoderCPR;
         public static final double kGearRatio = 10.75;
+        public static final double kWheelCircumference = kWheelDiameterInches * Math.PI;
     }
 
     public static final class AutoConstants{

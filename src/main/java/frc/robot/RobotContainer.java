@@ -98,10 +98,10 @@ public class RobotContainer {
     // While holding the Shoulder Button drive slow
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new HalveDriveSpeed(m_robotDrive));
     
-    new JoystickButton(m_operatorController, 0).whenHeld(new BallPistion(m_blow));
-    new JoystickButton(m_operatorController, 5).whenHeld(new SuckIn(m_intake));
-    new JoystickButton(m_operatorController, 4).whenHeld(new SpitOut(m_intake));
-    new JoystickButton(m_operatorController, 15).whenHeld(new RaiseTheBoi(m_lift));
+    new JoystickButton(m_operatorController, 1).whenHeld(new BallPistion(m_blow));
+    new JoystickButton(m_operatorController, 6).whenHeld(new SuckIn(m_intake));
+    new JoystickButton(m_operatorController, 5).whenHeld(new SpitOut(m_intake));
+    new JoystickButton(m_operatorController, 16).whenHeld(new RaiseTheBoi(m_lift));
   }
 
 

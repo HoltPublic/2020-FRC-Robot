@@ -9,9 +9,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
@@ -47,6 +49,12 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftMasterMotor.setInverted(false);
     m_leftSlaveMotor.setInverted(InvertType.FollowMaster);
 
+    m_rightMasterMotor.setNeutralMode(NeutralMode.Brake);
+    m_rightSlaveMotor.setNeutralMode(NeutralMode.Brake);
+    
+    m_leftMasterMotor.setNeutralMode(NeutralMode.Brake);
+    m_leftSlaveMotor.setNeutralMode(NeutralMode.Brake);
+
     m_rightMasterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     m_leftMasterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
@@ -70,14 +78,15 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double getDistance(){
     return (getRightDistance() + getLeftDistance()) / 2;
+    
   }
 
   public double getRightDistance(){
-    return ((m_rightMasterMotor.getSelectedSensorPosition() / DriveConstants.kEncoderCPR) * DriveConstants.kEncoderDistancePerPulse) / DriveConstants.kGearRatio;
+    return -((m_rightMasterMotor.getSelectedSensorPosition() / DriveConstants.kEncoderCPR) / DriveConstants.kGearRatio) * DriveConstants.kWheelCircumference;
   }
 
   public double getLeftDistance(){
-    return ((m_leftMasterMotor.getSelectedSensorPosition() / DriveConstants.kEncoderCPR) * DriveConstants.kEncoderDistancePerPulse) / DriveConstants.kGearRatio;
+    return ((m_leftMasterMotor.getSelectedSensorPosition() / DriveConstants.kEncoderCPR) / DriveConstants.kGearRatio) * DriveConstants.kWheelCircumference;
   }
 
   public void resetEncoders(){
@@ -88,5 +97,6 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    Shuffleboard.getTab("Main Tab").add("Drive", m_drive).withSize(2, 2).withPosition(0, 0);
   }
 }
