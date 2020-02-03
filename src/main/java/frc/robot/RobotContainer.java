@@ -14,16 +14,17 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 
 import frc.robot.commands.drive.DefaultDrive;
+import frc.robot.commands.drive.DriveDistance;
+import frc.robot.commands.drive.DriveTime;
 import frc.robot.commands.drive.HalveDriveSpeed;
 import frc.robot.commands.intake.SpitOut;
 import frc.robot.commands.intake.SuckIn;
-import frc.robot.commands.auto.CoolAutonWithLights;
-import frc.robot.commands.auto.SimpleDriveWithLights;
 import frc.robot.commands.leds.AutonLights;
 import frc.robot.commands.leds.TeleOPLights;
 import frc.robot.commands.lift.RaiseTheBoi;
@@ -45,7 +46,7 @@ import frc.robot.subsystems.Underglow;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final DriveSubsystem m_drive = new DriveSubsystem();
   private final ColorSensor m_color = new ColorSensor();
   private final Underglow m_glow = new Underglow();
   private final Pneumatics m_blow = new Pneumatics();
@@ -54,8 +55,8 @@ public class RobotContainer {
 
   // the stuff for auton
   // Auto that just drives for a few seconds and stops
-  private final Command m_driveAuto = new SimpleDriveWithLights(m_glow, m_robotDrive);
-  private final Command m_complexAuto = new CoolAutonWithLights(m_glow, m_robotDrive);
+  private final Command m_driveTimeAuto = new ParallelCommandGroup(new AutonLights(m_glow), new DriveTime(AutoConstants.kAutoDriveDistanceSeconds, AutoConstants.kAutoDriveSpeed, m_drive));
+  private final Command m_driveDistanceAuto = new ParallelCommandGroup(new AutonLights(m_glow), new DriveDistance(AutoConstants.kAutoDriveDistanceInches, AutoConstants.kAutoDriveSpeed, m_drive));
 
   // Auto that does nothing
   private final Command m_nothingAuto = new AutonLights(m_glow);
@@ -75,13 +76,14 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Sets the default commands
-    m_robotDrive.setDefaultCommand(new DefaultDrive(m_robotDrive,() -> -m_driverController.getY(GenericHID.Hand.kLeft),() -> m_driverController.getX(GenericHID.Hand.kLeft)));
+    //TODO: Get rid of the negative sign
+    m_drive.setDefaultCommand(new DefaultDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft),() -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
     m_color.setDefaultCommand(new GetColorName(m_color));
     m_glow.setDefaultCommand(new TeleOPLights(m_glow));
 
     // Add Commands to the auton command chooser
-    m_chooser.setDefaultOption("Drive Auto", m_driveAuto);
-    m_chooser.addOption("Cool boi", m_complexAuto);
+    m_chooser.setDefaultOption("Time Drive Auto", m_driveTimeAuto);
+    m_chooser.addOption("Distance Drive Auto", m_driveDistanceAuto);
     m_chooser.addOption("Do Nothing", m_nothingAuto);
 
     // Put the chooser on the dashboard
@@ -96,7 +98,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // While holding the Shoulder Button drive slow
-    new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new HalveDriveSpeed(m_robotDrive));
+    new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new HalveDriveSpeed(m_drive));
     
     new JoystickButton(m_operatorController, 1).whenHeld(new BallPistion(m_blow));
     new JoystickButton(m_operatorController, 6).whenHeld(new SuckIn(m_intake));

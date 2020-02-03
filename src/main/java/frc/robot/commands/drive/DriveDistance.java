@@ -17,7 +17,7 @@ public class DriveDistance extends CommandBase {
   /**
    * Creates a new DriveDistance.
    */
-  public DriveDistance(DriveSubsystem drive, double distanceInches, double speed) {
+  public DriveDistance(double distanceInches, double speed, DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_distance = distanceInches;

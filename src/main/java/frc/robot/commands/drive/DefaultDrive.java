@@ -20,7 +20,7 @@ public class DefaultDrive extends CommandBase {
   /**
    * Creates a new DefaultDrive.
    */
-  public DefaultDrive(DriveSubsystem subsystem, DoubleSupplier forward, DoubleSupplier rotation) {
+  public DefaultDrive(DoubleSupplier forward, DoubleSupplier rotation, DriveSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = subsystem;
     m_forward = forward;
