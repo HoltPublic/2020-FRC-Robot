@@ -33,8 +33,12 @@ public class TeleOPLights extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Get the Colorwheel color
     gameData = DriverStation.getInstance().getGameSpecificMessage();
+
+    // Checks to see if there is a color
     if(gameData.length() > 0){
+      // Sets the color to the Colorwheel
       switch(gameData.charAt(0)){
         case 'B' : m_glow.setColorWheelColor(Color.kBlue); break;
         case 'G' : m_glow.setColorWheelColor(Color.kGreen); break;
@@ -42,6 +46,7 @@ public class TeleOPLights extends CommandBase {
         case 'Y' : m_glow.setColorWheelColor(Color.kYellow); break;
       }
     } else{
+      // If no color use alliance color
       m_glow.setColorTeleOP(DriverStation.getInstance().getAlliance());
     }
   }

@@ -76,19 +76,23 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.stopMotor();
   }
 
+  // Gets the average distance from both sides
   public double getDistance(){
     return (getRightDistance() + getLeftDistance()) / 2;
     
   }
 
+  // Gets how far the right motors have gone
   public double getRightDistance(){
     return -((m_rightMasterMotor.getSelectedSensorPosition() / DriveConstants.kEncoderCPR) / DriveConstants.kGearRatio) * DriveConstants.kWheelCircumference;
   }
 
+  // Gets how far the left motors have gone
   public double getLeftDistance(){
     return ((m_leftMasterMotor.getSelectedSensorPosition() / DriveConstants.kEncoderCPR) / DriveConstants.kGearRatio) * DriveConstants.kWheelCircumference;
   }
 
+  // Sets the encoders to 0
   public void resetEncoders(){
     m_rightMasterMotor.setSelectedSensorPosition(0);
     m_leftMasterMotor.setSelectedSensorPosition(0);
@@ -97,6 +101,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    // Adds the drive to the computer
     Shuffleboard.getTab("Main Tab").add("Drive", m_drive).withSize(2, 2).withPosition(0, 0);
   }
 }

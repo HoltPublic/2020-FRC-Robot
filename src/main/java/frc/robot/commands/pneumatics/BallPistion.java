@@ -24,6 +24,7 @@ public class BallPistion extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // Blocks the balls
     m_blow.stopBalls();
   }
 
@@ -35,6 +36,7 @@ public class BallPistion extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // Let the balls go through
     m_blow.goBalls();
   }
 

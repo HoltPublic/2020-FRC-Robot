@@ -31,7 +31,8 @@ public class GetColorName extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putString("Color", m_color.printColorSensor());
+    // Prints the color to the computer
+    SmartDashboard.putString("Color", m_color.getColor());
   }
 
   // Called once the command ends or is interrupted.

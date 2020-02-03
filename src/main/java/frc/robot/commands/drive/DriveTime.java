@@ -30,27 +30,34 @@ public class DriveTime extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // Stops the robot incase it was driving
     m_drive.stopDrive();
+    // Sets the timer to 0
     m_timer.reset();
+    // Starts the timer
     m_timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Drives the robot at the set speed
     m_drive.arcadeDrive(m_speed, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // After the timer is done stop the robot
     m_drive.stopDrive();
+    // Stops the timer the save CPU Power
     m_timer.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // Keeps checking if the set time has passed
     return m_timer.hasPeriodPassed(m_time);
   }
 }

@@ -24,6 +24,7 @@ public class HalveDriveSpeed extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // Sets the robot to 40% speed
     m_drive.setMaxOutput(0.4);
   }
 
@@ -35,6 +36,7 @@ public class HalveDriveSpeed extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // Sets the robot to 100%
     m_drive.setMaxOutput(1);
   }
 

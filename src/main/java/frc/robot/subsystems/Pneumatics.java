@@ -14,20 +14,26 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PneumaticsConstants;
 
 public class Pneumatics extends SubsystemBase {
+  // Makes the Compressor
   private final Compressor m_compressor = new Compressor();
+
+  // Makes the Double Solenoid
   private final DoubleSolenoid m_ballStopper = new DoubleSolenoid(PneumaticsConstants.kBallStopperForward, PneumaticsConstants.kBallStopperBackward);
 
   /**
    * Creates a new Pneumatics.
    */
   public Pneumatics() {
+    // Sets up the pneumatics
     m_compressor.setClosedLoopControl(true);
   }
 
+  // Blocks the balls
   public void stopBalls(){
     m_ballStopper.set(Value.kForward);
   }
 
+  // Unblock the balls
   public void goBalls(){
     m_ballStopper.set(Value.kReverse);
   }

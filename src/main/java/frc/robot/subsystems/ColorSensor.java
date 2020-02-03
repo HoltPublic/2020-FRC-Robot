@@ -16,10 +16,14 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ColorSensor extends SubsystemBase {
+  // Makes the I2C port
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
+
+  // Makes the ColorSensor
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-  private ColorMatch m_colorMatcher = new ColorMatch();
-  private Color m_currentColor;
+
+  // All the Colormatch Stuff
+  private final ColorMatch m_colorMatcher = new ColorMatch();
   private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
   private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
   private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
@@ -29,16 +33,18 @@ public class ColorSensor extends SubsystemBase {
    * Creates a new ColorSensor.
    */
   public ColorSensor() {
+    // Adds the colors to the colormatcher
     m_colorMatcher.addColorMatch(kBlueTarget);
     m_colorMatcher.addColorMatch(kGreenTarget);
     m_colorMatcher.addColorMatch(kRedTarget);
     m_colorMatcher.addColorMatch(kYellowTarget);
   }
 
-  public String printColorSensor(){
-    m_currentColor = m_colorSensor.getColor();
-    ColorMatchResult m_result = m_colorMatcher.matchClosestColor(m_currentColor);
+  public String getColor(){
+    // gets the current color
+    ColorMatchResult m_result = m_colorMatcher.matchClosestColor(m_colorSensor.getColor());
 
+    // Checks the color and returns it
     if (m_result.color == kBlueTarget) {
       return "Blue";
     } else if (m_result.color == kRedTarget) {

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BlinkinConstants;;
 
 public class Underglow extends SubsystemBase {
+  // Makes the Blinkin
   private final Spark m_blinkin = new Spark(BlinkinConstants.kBlinkinPWM);
 
   /**
@@ -23,6 +24,7 @@ public class Underglow extends SubsystemBase {
 
   }
 
+  // Sets the robot to the alliance color
   public void setColorTeleOP(Alliance color){
     if(color == Alliance.Blue){
       m_blinkin.set(0.87);
@@ -33,6 +35,7 @@ public class Underglow extends SubsystemBase {
     }
   }
 
+  // Sets the robot to the alliance color but blinking
   public void setColorAuton(Alliance color){
     if(color == Alliance.Blue){
       m_blinkin.set(-0.09);
@@ -43,6 +46,7 @@ public class Underglow extends SubsystemBase {
     }
   }
 
+  // Sets the robot to the Colorwheel color
   public void setColorWheelColor(Color color){
     if(color == Color.kBlue){
       m_blinkin.set(-0.09);

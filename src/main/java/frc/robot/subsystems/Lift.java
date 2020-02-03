@@ -16,45 +16,58 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LiftConstants;
 
 public class Lift extends SubsystemBase {
+  // Makes the climb motor
   private final WPI_VictorSPX m_climbMotor = new WPI_VictorSPX(LiftConstants.kClimbMotor);
+
+  // Makes the telescope motor
   private final WPI_TalonSRX m_telescope = new WPI_TalonSRX(LiftConstants.kTelescopeMotor);
+
   /**
    * Creates a new Lift.
    */
   public Lift() {
+    // Sets up the motors
     m_climbMotor.configFactoryDefault();
     m_telescope.configFactoryDefault();
 
     m_climbMotor.setInverted(false);
     m_telescope.setInverted(false);
 
+    // Sets up the encoder
     m_telescope.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
+  // Lifts the telescope
   public void raiseTelescope(){
     m_telescope.set(1);
   }
 
-  public void lowerelescope(){
+  // Lowers the telescope
+  public void lowerTelescope(){
     m_telescope.set(-1);
   }
 
+  // Stops the Telescope
   public void stopTelescope(){
     m_telescope.set(0);
   }
 
+  // Resets the encoder
   public void resetEncoder(){
     m_telescope.setSelectedSensorPosition(0);
   }
 
+  // Gets the rotation from the encoder
   public double getRotation(){
     return m_telescope.getSelectedSensorPosition() / LiftConstants.kEncoderCPR;
   }
 
+  // Starts the motor to lift the robot
   public void startWinch(){
     m_climbMotor.set(1);
   }
 
+  // Stops the motor
   public void stopWinch(){
     m_climbMotor.set(0);
   }

@@ -53,8 +53,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Lift m_lift = new Lift();
 
-  // the stuff for auton
-  // Auto that just drives for a few seconds and stops
+  // Different types of auto commands
   private final Command m_driveTimeAuto = new ParallelCommandGroup(new AutonLights(m_glow), new DriveTime(AutoConstants.kAutoDriveDistanceSeconds, AutoConstants.kAutoDriveSpeed, m_drive));
   private final Command m_driveDistanceAuto = new ParallelCommandGroup(new AutonLights(m_glow), new DriveDistance(AutoConstants.kAutoDriveDistanceInches, AutoConstants.kAutoDriveSpeed, m_drive));
 
@@ -100,9 +99,13 @@ public class RobotContainer {
     // While holding the Shoulder Button drive slow
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new HalveDriveSpeed(m_drive));
     
+    // When the trigger is pressed block the balls
     new JoystickButton(m_operatorController, 1).whenHeld(new BallPistion(m_blow));
+    // When button is pressed starts the intake
     new JoystickButton(m_operatorController, 6).whenHeld(new SuckIn(m_intake));
+    // When button is pressed reverses the intake
     new JoystickButton(m_operatorController, 5).whenHeld(new SpitOut(m_intake));
+    // When button is pressed lift the robot
     new JoystickButton(m_operatorController, 16).whenHeld(new RaiseTheBoi(m_lift));
   }
 

@@ -29,18 +29,21 @@ public class LightSaborDown extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_lift.lowerelescope();
+    // Lowers the telescope
+    m_lift.lowerTelescope();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // Stops the motor
     m_lift.stopTelescope();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // Checks to see if the telescope is all the way down
     return Math.abs(m_lift.getRotation()) <= 0;
   }
 }

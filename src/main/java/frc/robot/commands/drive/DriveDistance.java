@@ -28,25 +28,31 @@ public class DriveDistance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // Resets the Encoders so the distance is right
     m_drive.resetEncoders();
+    
+    // Stops the robot incase it was moving
     m_drive.stopDrive();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Drives the robot straight at the set speed
     m_drive.arcadeDrive(m_speed, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // Stops the robot after the set distance
     m_drive.stopDrive();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // Keeps checking to see if the robot driven the set distance
     return Math.abs(m_drive.getDistance()) >= m_distance;
   }
 }

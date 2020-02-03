@@ -29,12 +29,14 @@ public class RaiseTheBoi extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Starts to lift the robot
     m_lift.startWinch();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // Stops the lift
     m_lift.stopWinch();
   }
 

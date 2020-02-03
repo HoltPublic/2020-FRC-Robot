@@ -31,26 +31,32 @@ public class TurnTime extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // Stops the robot incase it was driving
     m_drive.stopDrive();
+    // Sets the timer to 0
     m_timer.reset();
+    // Starts the timer
     m_timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Turns the robot at set speed
     m_drive.arcadeDrive(0, m_speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // Stops the robot
     m_drive.stopDrive();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // Keeps checking if the set time has passed
     return m_timer.hasPeriodPassed(m_time);
   }
 }

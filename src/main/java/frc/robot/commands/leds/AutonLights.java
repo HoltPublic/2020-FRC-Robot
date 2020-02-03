@@ -26,6 +26,7 @@ public class AutonLights extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // Sets the correct Alliance color
     m_glow.setColorAuton(DriverStation.getInstance().getAlliance());
   }
 
@@ -42,6 +43,7 @@ public class AutonLights extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // Stops after Auton is done
     return !DriverStation.getInstance().isAutonomous();
   }
 }
