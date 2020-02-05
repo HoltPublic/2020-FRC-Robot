@@ -14,7 +14,8 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
@@ -22,6 +23,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.commands.drive.DriveDistance;
 import frc.robot.commands.drive.DriveTime;
+import frc.robot.commands.drive.FlipDrive;
 import frc.robot.commands.drive.HalveDriveSpeed;
 import frc.robot.commands.intake.SpitOut;
 import frc.robot.commands.intake.SuckIn;
@@ -54,8 +56,10 @@ public class RobotContainer {
   private final Lift m_lift = new Lift();
 
   // Different types of auto commands
-  private final Command m_driveTimeAuto = new ParallelCommandGroup(new AutonLights(m_glow), new DriveTime(AutoConstants.kAutoDriveDistanceSeconds, AutoConstants.kAutoDriveSpeed, m_drive));
-  private final Command m_driveDistanceAuto = new ParallelCommandGroup(new AutonLights(m_glow), new DriveDistance(AutoConstants.kAutoDriveDistanceInches, AutoConstants.kAutoDriveSpeed, m_drive));
+  private final Command m_driveTimeAuto = new DriveTime(AutoConstants.kDriveDistanceSeconds, AutoConstants.kDriveSpeed, m_drive);
+  private final Command m_driveDistanceAuto = new DriveDistance(AutoConstants.kDriveGetOffLineInches, AutoConstants.kDriveSpeed, m_drive);
+  private final Command m_driveToDump = new SequentialCommandGroup(new DriveDistance(AutoConstants.kDriveToDumpInches, AutoConstants.kDriveSpeed, m_drive), new SuckIn(m_intake).withTimeout(5));
+  private final Command m_dumpInBuddy = new SequentialCommandGroup(new WaitCommand(AutoConstants.kDumpToBuddySeconds), new SpitOut(m_intake).withTimeout(5));
 
   // Auto that does nothing
   private final Command m_nothingAuto = new AutonLights(m_glow);
@@ -75,14 +79,15 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Sets the default commands
-    //TODO: Get rid of the negative sign
-    m_drive.setDefaultCommand(new DefaultDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft),() -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
+    m_drive.setDefaultCommand(new DefaultDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
     m_color.setDefaultCommand(new GetColorName(m_color));
     m_glow.setDefaultCommand(new TeleOPLights(m_glow));
 
     // Add Commands to the auton command chooser
-    m_chooser.setDefaultOption("Time Drive Auto", m_driveTimeAuto);
-    m_chooser.addOption("Distance Drive Auto", m_driveDistanceAuto);
+    m_chooser.setDefaultOption("Distance Drive Auto", m_driveDistanceAuto);
+    m_chooser.addOption("Drive and Dump", m_driveToDump);
+    m_chooser.addOption("Dump in Buddy", m_dumpInBuddy);
+    m_chooser.addOption("Time Drive Auto", m_driveTimeAuto);
     m_chooser.addOption("Do Nothing", m_nothingAuto);
 
     // Put the chooser on the dashboard
@@ -98,6 +103,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // While holding the Shoulder Button drive slow
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new HalveDriveSpeed(m_drive));
+    // While holding the other Shoulder Button it flips the front
+    new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new FlipDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
     
     // When the trigger is pressed block the balls
     new JoystickButton(m_operatorController, 1).whenHeld(new BallPistion(m_blow));
@@ -109,6 +116,9 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, 16).whenHeld(new RaiseTheBoi(m_lift));
   }
 
+  public Command getAutonLights(){
+    return new AutonLights(m_glow);
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -29,9 +29,11 @@ public final class Constants {
     }
 
     public static final class AutoConstants{
-        public static final double kAutoDriveSpeed = .5;
-        public static final double kAutoDriveDistanceSeconds = 4;
-        public static final double kAutoDriveDistanceInches = 120;
+        public static final double kDriveSpeed = .5;
+        public static final double kDriveDistanceSeconds = 4;
+        public static final double kDriveGetOffLineInches = 120;
+        public static final double kDriveToDumpInches = 110;
+        public static final double kDumpToBuddySeconds = 10;
     }
 
     public static final class BlinkinConstants{

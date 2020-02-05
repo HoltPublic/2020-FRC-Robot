@@ -12,15 +12,15 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class DefaultDrive extends CommandBase {
+public class FlipDrive extends CommandBase {
   private final DriveSubsystem m_drive;
   private final DoubleSupplier m_forward;
   private final DoubleSupplier m_rotation;
-
+  
   /**
-   * Creates a new DefaultDrive.
+   * Creates a new FlipDrive.
    */
-  public DefaultDrive(DoubleSupplier forward, DoubleSupplier rotation, DriveSubsystem drive) {
+  public FlipDrive(DoubleSupplier forward, DoubleSupplier rotation, DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_forward = forward;
@@ -36,8 +36,7 @@ public class DefaultDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Normal ArcadeDrive
-    m_drive.arcadeDrive(m_forward.getAsDouble(), m_rotation.getAsDouble());
+    m_drive.flipDrive(m_forward.getAsDouble(), m_rotation.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

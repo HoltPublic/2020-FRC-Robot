@@ -71,6 +71,11 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.setMaxOutput(maxOutput);
   }
 
+  // Flips the front of the robot
+  public void flipDrive(double fwd, double rot){
+    m_drive.arcadeDrive(-fwd, rot);
+  }
+
   // Stops the robot
   public void stopDrive(){
     m_drive.stopMotor();
