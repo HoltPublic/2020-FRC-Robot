@@ -11,7 +11,9 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,6 +30,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The Robot's Drive
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMasterMotor, m_rightMasterMotor);
+
+  // The navX
+  private final AHRS m_navX = new AHRS(SPI.Port.kMXP);
 
   /**
    * Creates a new DriveSubsystem.
@@ -84,7 +89,6 @@ public class DriveSubsystem extends SubsystemBase {
   // Gets the average distance from both sides
   public double getDistance(){
     return (getRightDistance() + getLeftDistance()) / 2;
-    
   }
 
   // Gets how far the right motors have gone
@@ -101,6 +105,14 @@ public class DriveSubsystem extends SubsystemBase {
   public void resetEncoders(){
     m_rightMasterMotor.setSelectedSensorPosition(0);
     m_leftMasterMotor.setSelectedSensorPosition(0);
+  }
+
+  public double getGyro(){
+    return m_navX.getAngle();
+  }
+
+  public void resetGyro(){
+    m_navX.reset();
   }
 
   @Override

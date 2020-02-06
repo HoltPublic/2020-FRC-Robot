@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 
@@ -25,6 +26,7 @@ import frc.robot.commands.drive.DriveDistance;
 import frc.robot.commands.drive.DriveTime;
 import frc.robot.commands.drive.FlipDrive;
 import frc.robot.commands.drive.HalveDriveSpeed;
+import frc.robot.commands.drive.TurnAngleRight;
 import frc.robot.commands.intake.SpitOut;
 import frc.robot.commands.intake.SuckIn;
 import frc.robot.commands.leds.AutonLights;
@@ -60,6 +62,7 @@ public class RobotContainer {
   private final Command m_driveDistanceAuto = new DriveDistance(AutoConstants.kDriveGetOffLineInches, AutoConstants.kDriveSpeed, m_drive);
   private final Command m_driveToDump = new SequentialCommandGroup(new DriveDistance(AutoConstants.kDriveToDumpInches, AutoConstants.kDriveSpeed, m_drive), new SuckIn(m_intake).withTimeout(5));
   private final Command m_dumpInBuddy = new SequentialCommandGroup(new WaitCommand(AutoConstants.kDumpToBuddySeconds), new SpitOut(m_intake).withTimeout(5));
+  private final Command m_comeMySon = new SequentialCommandGroup(new DriveDistance(120, .5, m_drive), new TurnAngleRight(180, .5, m_drive), new DriveDistance(120, .5, m_drive));
 
   // Auto that does nothing
   private final Command m_nothingAuto = new AutonLights(m_glow);
@@ -87,6 +90,7 @@ public class RobotContainer {
     m_chooser.setDefaultOption("Distance Drive Auto", m_driveDistanceAuto);
     m_chooser.addOption("Drive and Dump", m_driveToDump);
     m_chooser.addOption("Dump in Buddy", m_dumpInBuddy);
+    m_chooser.addOption("My Son", m_comeMySon);
     m_chooser.addOption("Time Drive Auto", m_driveTimeAuto);
     m_chooser.addOption("Do Nothing", m_nothingAuto);
 
