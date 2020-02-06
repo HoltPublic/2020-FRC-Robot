@@ -71,8 +71,8 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   // Controllers
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  Joystick m_operatorController = new Joystick(OIConstants.kOperatorContollerPort);
+  private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  private final Joystick m_operatorController = new Joystick(OIConstants.kOperatorContollerPort);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
