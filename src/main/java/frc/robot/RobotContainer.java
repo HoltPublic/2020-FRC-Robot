@@ -69,6 +69,9 @@ public class RobotContainer {
   // A chooser for auto commands
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  // A chooser for the song
+  private final SendableChooser<Integer> m_song = new SendableChooser<>();
+
   // Controllers
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final Joystick m_operatorController = new Joystick(OIConstants.kOperatorContollerPort);
@@ -92,8 +95,13 @@ public class RobotContainer {
     m_chooser.addOption("My Son", m_comeMySon);
     m_chooser.addOption("Do Nothing", m_nothingAuto);
 
-    // Put the chooser on the dashboard
-    Shuffleboard.getTab("Autonomous").add(m_chooser);
+    // The songs you can choose
+    m_song.setDefaultOption("Megalovania", 1);
+    m_song.addOption("Turret Song", 0);
+
+    // Put the choosers on the dashboard
+    Shuffleboard.getTab("Main Tab").add(m_chooser);
+    Shuffleboard.getTab("Main Tab").add(m_song);
   }
 
   /**
@@ -109,7 +117,7 @@ public class RobotContainer {
     // While holding the other Shoulder Button it flips the front
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new FlipDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
     // When button is pressed music will play from falcons
-    new JoystickButton(m_driverController, Button.kStart.value).whenPressed(new StartMusic(m_drive));
+    new JoystickButton(m_driverController, Button.kStart.value).whenPressed(new StartMusic(m_song.getSelected(), m_drive));
     
     /*  Operator Controls */
     // When the trigger is pressed block the balls

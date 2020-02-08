@@ -12,12 +12,14 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class StartMusic extends CommandBase {
   private final DriveSubsystem m_drive;
+  private final int m_song;
 
   /**
    * Creates a new StartMusic.
    */
-  public StartMusic(DriveSubsystem drive) {
+  public StartMusic(int song, DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_song = song;
     m_drive = drive;
     addRequirements(m_drive);
   }
@@ -25,7 +27,7 @@ public class StartMusic extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.playMusic();
+    m_drive.playMusic(m_song);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

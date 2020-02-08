@@ -37,7 +37,8 @@ public class DriveSubsystem extends SubsystemBase {
   // So the Falcons can sing
   private final Orchestra m_orchestra = new Orchestra();
   
-
+  // All the songs
+  private final String[] m_songs = {"turret.chrp", "mega.chrp"};
   /**
    * Creates a new DriveSubsystem.
    */
@@ -130,7 +131,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   // Starts the music
-  public void playMusic(){
+  public void playMusic(int song){
+    m_orchestra.loadMusic(m_songs[song]);
     m_orchestra.play();
   }
 
