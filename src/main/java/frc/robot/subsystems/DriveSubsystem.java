@@ -11,11 +11,11 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.music.Orchestra;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
@@ -33,6 +33,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The navX
   private final AHRS m_navX = new AHRS(SPI.Port.kMXP);
+
+  // So the Falcons can sing
+  private final Orchestra m_orchestra = new Orchestra();
+  
 
   /**
    * Creates a new DriveSubsystem.
@@ -64,6 +68,14 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftMasterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
     m_drive.setRightSideInverted(true);
+
+    m_orchestra.addInstrument(m_rightMasterMotor);
+    m_orchestra.addInstrument(m_rightSlaveMotor);
+
+    m_orchestra.addInstrument(m_leftMasterMotor);
+    m_orchestra.addInstrument(m_leftSlaveMotor);
+
+    m_orchestra.loadMusic("song.chrp");
   }
 
   // Drives the robot
@@ -107,18 +119,34 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftMasterMotor.setSelectedSensorPosition(0);
   }
 
+  // Returns the angle of the gyro
   public double getGyro(){
     return m_navX.getAngle();
   }
 
+  // Resets the gyro to 0
   public void resetGyro(){
     m_navX.reset();
+  }
+
+  // Starts the music
+  public void playMusic(){
+    m_orchestra.play();
+  }
+
+  // Stops the music
+  public void stopMusic(){
+    m_orchestra.stop();
+  }
+
+  // Checks to see if the music is playing
+  public boolean isMusicPlaying(){
+    return m_orchestra.isPlaying();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     // Adds the drive to the computer
-    Shuffleboard.getTab("Main Tab").add("Drive", m_drive).withSize(2, 2).withPosition(0, 0);
   }
 }

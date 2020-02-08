@@ -23,9 +23,9 @@ import frc.robot.Constants.OIConstants;
 
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.commands.drive.DriveDistance;
-import frc.robot.commands.drive.DriveTime;
 import frc.robot.commands.drive.FlipDrive;
 import frc.robot.commands.drive.HalveDriveSpeed;
+import frc.robot.commands.drive.StartMusic;
 import frc.robot.commands.drive.TurnAngleRight;
 import frc.robot.commands.intake.SpitOut;
 import frc.robot.commands.intake.SuckIn;
@@ -58,7 +58,6 @@ public class RobotContainer {
   private final Lift m_lift = new Lift();
 
   // Different types of auto commands
-  private final Command m_driveTimeAuto = new DriveTime(AutoConstants.kDriveDistanceSeconds, AutoConstants.kDriveSpeed, m_drive);
   private final Command m_driveDistanceAuto = new DriveDistance(AutoConstants.kDriveGetOffLineInches, AutoConstants.kDriveSpeed, m_drive);
   private final Command m_driveToDump = new SequentialCommandGroup(new DriveDistance(AutoConstants.kDriveToDumpInches, AutoConstants.kDriveSpeed, m_drive), new SuckIn(m_intake).withTimeout(5));
   private final Command m_dumpInBuddy = new SequentialCommandGroup(new WaitCommand(AutoConstants.kDumpToBuddySeconds), new SpitOut(m_intake).withTimeout(5));
@@ -68,7 +67,7 @@ public class RobotContainer {
   private final Command m_nothingAuto = new AutonLights(m_glow);
 
   // A chooser for auto commands
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   // Controllers
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -91,7 +90,6 @@ public class RobotContainer {
     m_chooser.addOption("Drive and Dump", m_driveToDump);
     m_chooser.addOption("Dump in Buddy", m_dumpInBuddy);
     m_chooser.addOption("My Son", m_comeMySon);
-    m_chooser.addOption("Time Drive Auto", m_driveTimeAuto);
     m_chooser.addOption("Do Nothing", m_nothingAuto);
 
     // Put the chooser on the dashboard
@@ -105,11 +103,15 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    /*  Driver Controls */
     // While holding the Shoulder Button drive slow
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new HalveDriveSpeed(m_drive));
     // While holding the other Shoulder Button it flips the front
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new FlipDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
+    // When button is pressed music will play from falcons
+    new JoystickButton(m_driverController, Button.kStart.value).whenPressed(new StartMusic(m_drive));
     
+    /*  Operator Controls */
     // When the trigger is pressed block the balls
     new JoystickButton(m_operatorController, 1).whenHeld(new BallPistion(m_blow));
     // When button is pressed starts the intake
