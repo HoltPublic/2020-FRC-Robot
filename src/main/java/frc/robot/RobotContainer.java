@@ -22,7 +22,8 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 
 import frc.robot.commands.drive.DefaultDrive;
-import frc.robot.commands.drive.DriveDistance;
+import frc.robot.commands.drive.DriveBackDistance;
+import frc.robot.commands.drive.DriveForwardDistance;
 import frc.robot.commands.drive.FlipDrive;
 import frc.robot.commands.drive.HalveDriveSpeed;
 import frc.robot.commands.drive.StartMusic;
@@ -58,10 +59,10 @@ public class RobotContainer {
   private final Lift m_lift = new Lift();
 
   // Different types of auto commands
-  private final Command m_driveDistanceAuto = new DriveDistance(AutoConstants.kDriveGetOffLineInches, AutoConstants.kDriveSpeed, m_drive);
-  private final Command m_driveToDump = new SequentialCommandGroup(new DriveDistance(AutoConstants.kDriveToDumpInches, AutoConstants.kDriveSpeed, m_drive), new SuckIn(m_intake).withTimeout(5));
+  private final Command m_driveDistanceAuto = new DriveForwardDistance(AutoConstants.kDriveGetOffLineInches, AutoConstants.kDriveSpeed, m_drive);
+  private final Command m_driveToDump = new SequentialCommandGroup(new DriveBackDistance(AutoConstants.kDriveToDumpInches, AutoConstants.kDriveSpeed, m_drive), new SuckIn(m_intake).withTimeout(5));
   private final Command m_dumpInBuddy = new SequentialCommandGroup(new WaitCommand(AutoConstants.kDumpToBuddySeconds), new SpitOut(m_intake).withTimeout(5));
-  private final Command m_comeMySon = new SequentialCommandGroup(new DriveDistance(120, .5, m_drive), new TurnAngleRight(180, .5, m_drive), new DriveDistance(120, .5, m_drive));
+  private final Command m_comeMySon = new SequentialCommandGroup(new DriveForwardDistance(120, .5, m_drive), new TurnAngleRight(180, .5, m_drive), new DriveForwardDistance(120, .5, m_drive));
 
   // Auto that does nothing
   private final Command m_nothingAuto = new AutonLights(m_glow);

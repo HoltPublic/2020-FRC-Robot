@@ -10,14 +10,14 @@ package frc.robot.commands.drive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class DriveDistance extends CommandBase {
+public class DriveBackDistance extends CommandBase {
   private final DriveSubsystem m_drive;
   private final double m_distance;
   private final double m_speed;
   /**
-   * Creates a new DriveDistance.
+   * Creates a new DriveBackDistance.
    */
-  public DriveDistance(double distanceInches, double speed, DriveSubsystem drive) {
+  public DriveBackDistance(double distanceInches, double speed, DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_distance = distanceInches;
@@ -39,7 +39,7 @@ public class DriveDistance extends CommandBase {
   @Override
   public void execute() {
     // Drives the robot straight at the set speed
-    m_drive.arcadeDrive(m_speed, 0);
+    m_drive.arcadeDrive(-m_speed, 0);
   }
 
   // Called once the command ends or is interrupted.
@@ -52,7 +52,6 @@ public class DriveDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // Keeps checking to see if the robot driven the set distance
-    return Math.abs(m_drive.getDistance()) >= m_distance;
+    return Math.abs(-m_drive.getDistance()) >= m_distance;
   }
 }
