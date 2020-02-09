@@ -7,11 +7,14 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -65,7 +68,7 @@ public class RobotContainer {
   private final Command m_comeMySon = new SequentialCommandGroup(new DriveForwardDistance(120, .5, m_drive), new TurnAngleRight(180, .5, m_drive), new DriveForwardDistance(120, .5, m_drive));
 
   // Auto that does nothing
-  private final Command m_nothingAuto = new AutonLights(m_glow);
+  private final Command m_nothingAuto = new WaitCommand(15);
 
   // A chooser for auto commands
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -76,6 +79,12 @@ public class RobotContainer {
   // Controllers
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final Joystick m_operatorController = new Joystick(OIConstants.kOperatorContollerPort);
+
+  // Cameras
+  private final UsbCamera m_camera = CameraServer.getInstance().startAutomaticCapture();
+
+  // Tab for Shuffleboard
+  private final ShuffleboardTab m_mainTab = Shuffleboard.getTab("Main Tab");
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -97,12 +106,19 @@ public class RobotContainer {
     m_chooser.addOption("Do Nothing", m_nothingAuto);
 
     // The songs you can choose
-    m_song.setDefaultOption("Megalovania", 1);
-    m_song.addOption("Turret Song", 0);
+    m_song.setDefaultOption("Megalovania", 0);
+    m_song.addOption("Turret Song", 1);
+    m_song.addOption("Renai Circulation", 2);
+    m_song.addOption("Servant of Evil", 3);
+    m_song.addOption("Flamingo", 4);
 
-    // Put the choosers on the dashboard
-    Shuffleboard.getTab("Main Tab").add(m_chooser);
-    Shuffleboard.getTab("Main Tab").add(m_song);
+    // Settings for the cameras
+    m_camera.setResolution(720, 480);
+
+    // Put the choosers and cameras on the dashboard
+    m_mainTab.add(m_chooser).withSize(2, 1).withPosition(0, 0);
+    m_mainTab.add(m_song).withSize(2, 1).withPosition(0, 1);
+    m_mainTab.add(m_camera).withSize(3, 3).withPosition(2, 0);
   }
 
   /**

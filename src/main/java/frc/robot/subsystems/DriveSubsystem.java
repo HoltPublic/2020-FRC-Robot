@@ -38,7 +38,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final Orchestra m_orchestra = new Orchestra();
   
   // All the songs
-  private final String[] m_songs = {"turret.chrp", "mega.chrp"};
+  private final String[] m_songs = {"mega.chrp", "turret.chrp", "renai.chrp", "servant.chrp", "flamingo.chrp"};
   /**
    * Creates a new DriveSubsystem.
    */
@@ -75,8 +75,6 @@ public class DriveSubsystem extends SubsystemBase {
 
     m_orchestra.addInstrument(m_leftMasterMotor);
     m_orchestra.addInstrument(m_leftSlaveMotor);
-
-    m_orchestra.loadMusic("song.chrp");
   }
 
   // Drives the robot
@@ -149,6 +147,5 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // Adds the drive to the computer
   }
 }
