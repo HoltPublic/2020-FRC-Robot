@@ -29,7 +29,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final WPI_TalonFX m_leftSlaveMotor = new WPI_TalonFX(DriveConstants.kLeftMotor2Port);
 
   // The Robot's Drive
-  private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMasterMotor, m_rightMasterMotor);
+  public final DifferentialDrive m_drive = new DifferentialDrive(m_leftMasterMotor, m_rightMasterMotor);
 
   // The navX
   private final AHRS m_navX = new AHRS(SPI.Port.kMXP);

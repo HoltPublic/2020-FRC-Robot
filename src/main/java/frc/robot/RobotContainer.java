@@ -121,6 +121,8 @@ public class RobotContainer {
     m_mainTab.add(m_chooser).withSize(2, 1).withPosition(0, 0);
     m_mainTab.add(m_song).withSize(2, 1).withPosition(0, 1);
     m_mainTab.add(m_camera).withSize(3, 3).withPosition(2, 0);
+
+    m_mainTab.add(m_drive.m_drive).withSize(3, 2).withPosition(5, 0);
   }
 
   /**
