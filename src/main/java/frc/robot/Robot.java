@@ -95,7 +95,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_autonLights.cancel();
+    if (m_autonLights != null) {
+      m_autonLights.cancel();
+    }
   }
 
   /**
