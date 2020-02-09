@@ -112,6 +112,7 @@ public class RobotContainer {
     m_song.addOption("Renai Circulation", 2);
     m_song.addOption("Servant of Evil", 3);
     m_song.addOption("Flamingo", 4);
+    m_song.addOption("Star Spangled Banner", 5);
 
     // Settings for the cameras
     m_camera.setResolution(720, 480);

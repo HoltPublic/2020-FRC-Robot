@@ -38,7 +38,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final Orchestra m_orchestra = new Orchestra();
   
   // All the songs
-  private final String[] m_songs = {"mega.chrp", "turret.chrp", "renai.chrp", "servant.chrp", "flamingo.chrp"};
+  private final String[] m_songs = {"mega.chrp", "turret.chrp", "renai.chrp", "servant.chrp", "flamingo.chrp", "star.chrp"};
   /**
    * Creates a new DriveSubsystem.
    */
