@@ -67,6 +67,11 @@ public class Lift extends SubsystemBase {
     m_climbMotor.set(1);
   }
 
+  // Starts the motor to lower the robot
+  public void lowerWinch(){
+    m_climbMotor.set(-1);
+  }
+
   // Stops the motor
   public void stopWinch(){
     m_climbMotor.set(0);

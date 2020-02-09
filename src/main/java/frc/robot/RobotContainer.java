@@ -35,6 +35,7 @@ import frc.robot.commands.intake.SpitOut;
 import frc.robot.commands.intake.SuckIn;
 import frc.robot.commands.leds.AutonLights;
 import frc.robot.commands.leds.TeleOPLights;
+import frc.robot.commands.lift.LowerTheBoi;
 import frc.robot.commands.lift.RaiseTheBoi;
 import frc.robot.commands.pneumatics.BallPistion;
 import frc.robot.commands.colorsensor.GetColorName;
@@ -135,6 +136,8 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new FlipDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
     // When button is pressed music will play from falcons
     new JoystickButton(m_driverController, Button.kStart.value).whenPressed(new StartMusic(m_song.getSelected(), m_drive));
+    // When holding button the Winch will spin backwards
+    new JoystickButton(m_driverController, Button.kBack.value).whenHeld(new LowerTheBoi(m_lift));
     
     /*  Operator Controls */
     // When the trigger is pressed block the balls
