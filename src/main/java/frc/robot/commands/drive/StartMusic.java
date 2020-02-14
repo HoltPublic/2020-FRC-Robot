@@ -12,12 +12,12 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class StartMusic extends CommandBase {
   private final DriveSubsystem m_drive;
-  private final int m_song;
+  private final String m_song;
 
   /**
    * Creates a new StartMusic.
    */
-  public StartMusic(int song, DriveSubsystem drive) {
+  public StartMusic(String song, DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_song = song;
     m_drive = drive;
@@ -27,23 +27,24 @@ public class StartMusic extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.playMusic(m_song);
+    m_drive.getOrchestra().loadMusic(m_song);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_drive.getOrchestra().play();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.stopMusic();
+    m_drive.getOrchestra().stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_drive.isMusicPlaying();
+    return !m_drive.getOrchestra().isPlaying();
   }
 }

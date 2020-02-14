@@ -11,26 +11,27 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.LiftConstants;
 
 public class Lift extends SubsystemBase {
   // Makes the climb motor
-  private final WPI_VictorSPX m_climbMotor = new WPI_VictorSPX(LiftConstants.kClimbMotor);
+  //private final WPI_VictorSPX m_climbMotor = new WPI_VictorSPX(LiftConstants.kClimbMotor);
 
   // Makes the telescope motor
-  private final WPI_TalonSRX m_telescope = new WPI_TalonSRX(LiftConstants.kTelescopeMotor);
+  public final WPI_TalonSRX m_telescope = new WPI_TalonSRX(LiftConstants.kTelescopeMotor);
 
   /**
    * Creates a new Lift.
    */
   public Lift() {
     // Sets up the motors
-    m_climbMotor.configFactoryDefault();
+    //m_climbMotor.configFactoryDefault();
     m_telescope.configFactoryDefault();
 
-    m_climbMotor.setInverted(false);
+    //m_climbMotor.setInverted(false);
     m_telescope.setInverted(false);
 
     // Sets up the encoder
@@ -39,7 +40,8 @@ public class Lift extends SubsystemBase {
 
   // Lifts the telescope
   public void raiseTelescope(){
-    m_telescope.set(1);
+    m_telescope.set(.2);
+    
   }
 
   // Lowers the telescope
@@ -64,17 +66,17 @@ public class Lift extends SubsystemBase {
 
   // Starts the motor to lift the robot
   public void startWinch(){
-    m_climbMotor.set(1);
+    //m_climbMotor.set(1);
   }
 
   // Starts the motor to lower the robot
   public void lowerWinch(){
-    m_climbMotor.set(-1);
+    //m_climbMotor.set(-1);
   }
 
   // Stops the motor
   public void stopWinch(){
-    m_climbMotor.set(0);
+    //m_climbMotor.set(0);
   }
 
   @Override

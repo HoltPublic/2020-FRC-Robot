@@ -53,6 +53,6 @@ public class DriveForwardDistance extends CommandBase {
   @Override
   public boolean isFinished() {
     // Keeps checking to see if the robot driven the set distance
-    return Math.abs(m_drive.getDistance()) >= m_distance;
+    return Math.abs(m_drive.getDistanceInches()) >= m_distance;
   }
 }

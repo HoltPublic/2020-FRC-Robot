@@ -13,10 +13,14 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -35,6 +39,7 @@ import frc.robot.commands.intake.SpitOut;
 import frc.robot.commands.intake.SuckIn;
 import frc.robot.commands.leds.AutonLights;
 import frc.robot.commands.leds.TeleOPLights;
+import frc.robot.commands.lift.LightSaberUp;
 import frc.robot.commands.lift.LowerTheBoi;
 import frc.robot.commands.lift.RaiseTheBoi;
 import frc.robot.commands.pneumatics.BallPistion;
@@ -68,14 +73,11 @@ public class RobotContainer {
   private final Command m_dumpInBuddy = new SequentialCommandGroup(new WaitCommand(AutoConstants.kDumpToBuddySeconds), new SpitOut(m_intake).withTimeout(5));
   private final Command m_comeMySon = new SequentialCommandGroup(new DriveForwardDistance(120, .5, m_drive), new TurnAngleRight(180, .5, m_drive), new DriveForwardDistance(120, .5, m_drive));
 
-  // Auto that does nothing
-  private final Command m_nothingAuto = new WaitCommand(15);
-
   // A chooser for auto commands
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   // A chooser for the song
-  private final SendableChooser<Integer> m_song = new SendableChooser<>();
+  private final SendableChooser<String> m_song = new SendableChooser<>();
 
   // Controllers
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -91,9 +93,6 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
-
     // Sets the default commands
     m_drive.setDefaultCommand(new DefaultDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
     m_color.setDefaultCommand(new GetColorName(m_color));
@@ -104,15 +103,15 @@ public class RobotContainer {
     m_chooser.addOption("Drive and Dump", m_driveToDump);
     m_chooser.addOption("Dump in Buddy", m_dumpInBuddy);
     m_chooser.addOption("My Son", m_comeMySon);
-    m_chooser.addOption("Do Nothing", m_nothingAuto);
+    m_chooser.addOption("Do Nothing", new WaitCommand(15));
 
     // The songs you can choose
-    m_song.setDefaultOption("Megalovania", 0);
-    m_song.addOption("Turret Song", 1);
-    m_song.addOption("Renai Circulation", 2);
-    m_song.addOption("Servant of Evil", 3);
-    m_song.addOption("Flamingo", 4);
-    m_song.addOption("Star Spangled Banner", 5);
+    m_song.setDefaultOption("Megalovania", "mega.chrp");
+    m_song.addOption("Turret Song", "turret.chrp");
+    m_song.addOption("Renai Circulation", "renai.chrp");
+    m_song.addOption("Servant of Evil", "servant.chrp");
+    m_song.addOption("Flamingo", "flamingo.chrp");
+    m_song.addOption("Star Spangled Banner", "star.chrp");
 
     // Settings for the cameras
     m_camera.setResolution(720, 480);
@@ -122,7 +121,12 @@ public class RobotContainer {
     m_mainTab.add(m_song).withSize(2, 1).withPosition(0, 1);
     m_mainTab.add(m_camera).withSize(3, 3).withPosition(2, 0);
 
-    m_mainTab.add(m_drive.m_drive).withSize(3, 2).withPosition(5, 0);
+    Shuffleboard.getTab("Main Tab").add("Encoder", m_lift.m_telescope.getSelectedSensorPosition());
+
+    m_mainTab.add(m_drive.getDrive()).withSize(3, 2).withPosition(5, 0);
+
+    // Configure the button bindings
+    configureButtonBindings();
   }
 
   /**
@@ -138,9 +142,11 @@ public class RobotContainer {
     // While holding the other Shoulder Button it flips the front
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new FlipDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
     // When button is pressed music will play from falcons
-    new JoystickButton(m_driverController, Button.kStart.value).whenPressed(new StartMusic(m_song.getSelected(), m_drive));
+    new JoystickButton(m_driverController, Button.kA.value).whenPressed(new StartMusic(m_song.getSelected(), m_drive));
     // When holding button the Winch will spin backwards
     new JoystickButton(m_driverController, Button.kBack.value).whenHeld(new LowerTheBoi(m_lift));
+
+    new JoystickButton(m_driverController, Button.kA.value).whenPressed(new LightSaberUp(m_lift));
     
     /*  Operator Controls */
     // When the trigger is pressed block the balls
@@ -164,6 +170,24 @@ public class RobotContainer {
    */
 
   public Command getAutonomousCommand() {
+    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2));
+
+    config.setKinematics(m_drive.getKinematics());
+    
+    RamseteCommand command = new RamseteCommand(
+      trajectory,
+      m_drive::getPose,
+      new RamseteController(2.0, 0.7),
+      m_drive.getFeedforward(),
+      m_drive.getKinematics(),
+      m_drive::getSpeeds,
+      m_drive.getLeftPIDController(),
+      m_drive.getRightPIDController(),
+      m_drive::setOutput,
+      m_drive
+    );
+
+    
     return m_chooser.getSelected();
   }
 }
