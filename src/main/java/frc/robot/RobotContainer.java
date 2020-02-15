@@ -7,8 +7,13 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -17,7 +22,9 @@ import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -69,15 +76,14 @@ public class RobotContainer {
   
   // Trajectory stuff
   private final TrajectoryConfig m_config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2));
-  private final String trajectoryJSON = "paths/YourPath.wpilib.json";
-  private final Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+  
 
   // Different types of auto commands
   private final Command m_driveDistanceAuto = new DriveForwardDistance(AutoConstants.kDriveGetOffLineInches, AutoConstants.kDriveSpeed, m_drive);
   private final Command m_driveToDump = new SequentialCommandGroup(new DriveBackDistance(AutoConstants.kDriveToDumpInches, AutoConstants.kDriveSpeed, m_drive), new SuckIn(m_intake).withTimeout(5));
   private final Command m_dumpInBuddy = new SequentialCommandGroup(new WaitCommand(AutoConstants.kDumpToBuddySeconds), new SpitOut(m_intake).withTimeout(5));
   private final Command m_comeMySon = new SequentialCommandGroup(new DriveForwardDistance(120, .5, m_drive), new TurnAngleRight(180, .5, m_drive), new DriveForwardDistance(120, .5, m_drive));
-  private final Command m_driveToTrench = getRamCommand(TrajectoryUtil.fromPathweaverJson(trajectoryPath));
+  private final Command m_driveToTrench = getRamCommand("DriveToTrench.wpilib.json");
 
   // A chooser for auto commands
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -124,14 +130,12 @@ public class RobotContainer {
     m_song.addOption("Star Spangled Banner", "star.chrp");
 
     // Settings for the cameras
-    m_camera.setResolution(720, 480);
+    m_camera.setResolution(50, 50);
 
     // Put the choosers and cameras on the dashboard
     m_mainTab.add(m_chooser).withSize(2, 1).withPosition(0, 0);
     m_mainTab.add(m_song).withSize(2, 1).withPosition(0, 1);
     m_mainTab.add(m_camera).withSize(3, 3).withPosition(2, 0);
-
-    Shuffleboard.getTab("Main Tab").add("Encoder", m_lift.m_telescope.getSelectedSensorPosition());
 
     m_mainTab.add(m_drive.getDrive()).withSize(3, 2).withPosition(5, 0);
 
@@ -173,19 +177,27 @@ public class RobotContainer {
     return new AutonLights(m_glow);
   }
   
-  public command getRamCommand(Trajectory trajectory){
-    return new RamseteCommand(
-      trajectory,
-      m_drive::getPose,
-      new RamseteController(2.0, 0.7),
-      m_drive.getFeedforward(),
-      m_drive.getKinematics(),
-      m_drive::getSpeeds,
-      m_drive.getLeftPIDController(),
-      m_drive.getRightPIDController(),
-      m_drive::setOutput,
-      m_drive
-    );
+  public Command getRamCommand(String trajectoryJSON){
+    trajectoryJSON = "output/" + trajectoryJSON;
+    try{
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+      Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+      return new RamseteCommand(
+        trajectory,
+        m_drive::getPose,
+        new RamseteController(2.0, 0.7),
+        m_drive.getFeedforward(),
+        m_drive.getKinematics(),
+        m_drive::getSpeeds,
+        m_drive.getLeftPIDController(),
+        m_drive.getRightPIDController(),
+        m_drive::setOutput,
+        m_drive
+      );
+    } catch(IOException ex){
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+      return new WaitCommand(15);
+    }
   }
 
   /**
@@ -195,20 +207,6 @@ public class RobotContainer {
    */
 
   public Command getAutonomousCommand() {
-    RamseteCommand command = new RamseteCommand(
-      trajectory,
-      m_drive::getPose,
-      new RamseteController(2.0, 0.7),
-      m_drive.getFeedforward(),
-      m_drive.getKinematics(),
-      m_drive::getSpeeds,
-      m_drive.getLeftPIDController(),
-      m_drive.getRightPIDController(),
-      m_drive::setOutput,
-      m_drive
-    );
-
-    
     return m_chooser.getSelected();
   }
 }
