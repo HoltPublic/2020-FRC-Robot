@@ -66,12 +66,18 @@ public class RobotContainer {
   private final Pneumatics m_blow = new Pneumatics();
   private final Intake m_intake = new Intake();
   private final Lift m_lift = new Lift();
+  
+  // Trajectory stuff
+  private final TrajectoryConfig m_config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2));
+  private final String trajectoryJSON = "paths/YourPath.wpilib.json";
+  private final Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
 
   // Different types of auto commands
   private final Command m_driveDistanceAuto = new DriveForwardDistance(AutoConstants.kDriveGetOffLineInches, AutoConstants.kDriveSpeed, m_drive);
   private final Command m_driveToDump = new SequentialCommandGroup(new DriveBackDistance(AutoConstants.kDriveToDumpInches, AutoConstants.kDriveSpeed, m_drive), new SuckIn(m_intake).withTimeout(5));
   private final Command m_dumpInBuddy = new SequentialCommandGroup(new WaitCommand(AutoConstants.kDumpToBuddySeconds), new SpitOut(m_intake).withTimeout(5));
   private final Command m_comeMySon = new SequentialCommandGroup(new DriveForwardDistance(120, .5, m_drive), new TurnAngleRight(180, .5, m_drive), new DriveForwardDistance(120, .5, m_drive));
+  private final Command m_driveToTrench = getRamCommand(TrajectoryUtil.fromPathweaverJson(trajectoryPath));
 
   // A chooser for auto commands
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -97,12 +103,16 @@ public class RobotContainer {
     m_drive.setDefaultCommand(new DefaultDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
     m_color.setDefaultCommand(new GetColorName(m_color));
     m_glow.setDefaultCommand(new TeleOPLights(m_glow));
+    
+    // More Trajectory stuff
+    m_config.setKinematics(m_drive.getKinematics());
 
     // Add Commands to the auton command chooser
     m_chooser.setDefaultOption("Distance Drive Auto", m_driveDistanceAuto);
     m_chooser.addOption("Drive and Dump", m_driveToDump);
     m_chooser.addOption("Dump in Buddy", m_dumpInBuddy);
     m_chooser.addOption("My Son", m_comeMySon);
+    m_chooser.addOption("Drive to Trench", m_driveToTrench);
     m_chooser.addOption("Do Nothing", new WaitCommand(15));
 
     // The songs you can choose
@@ -162,6 +172,21 @@ public class RobotContainer {
   public Command getAutonLights(){
     return new AutonLights(m_glow);
   }
+  
+  public command getRamCommand(Trajectory trajectory){
+    return new RamseteCommand(
+      trajectory,
+      m_drive::getPose,
+      new RamseteController(2.0, 0.7),
+      m_drive.getFeedforward(),
+      m_drive.getKinematics(),
+      m_drive::getSpeeds,
+      m_drive.getLeftPIDController(),
+      m_drive.getRightPIDController(),
+      m_drive::setOutput,
+      m_drive
+    );
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -170,10 +195,6 @@ public class RobotContainer {
    */
 
   public Command getAutonomousCommand() {
-    TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2));
-
-    config.setKinematics(m_drive.getKinematics());
-    
     RamseteCommand command = new RamseteCommand(
       trajectory,
       m_drive::getPose,
