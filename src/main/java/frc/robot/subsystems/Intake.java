@@ -14,34 +14,20 @@ import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
   // Makes the intake motor
-  private final WPI_VictorSPX m_BeltIntake = new WPI_VictorSPX(IntakeConstants.kBeltMotor);
-
-  // the max speed
-  private final double maxSpeed = 0.6;
+  private final WPI_VictorSPX m_beltIntake = new WPI_VictorSPX(IntakeConstants.kBeltMotor);
 
   /**
    * Creates a new Intake.
    */
   public Intake() {
     // Sets up the motor
-    m_BeltIntake.configFactoryDefault();
+    m_beltIntake.configFactoryDefault();
 
-    m_BeltIntake.setInverted(false);
+    m_beltIntake.setInverted(false);
   }
 
-  // Starts the intake forward
-  public void intakeTheBalls(){
-    m_BeltIntake.set(maxSpeed);
-  }
-
-  // Starts the intake backwards
-  public void spitTheBalls(){
-    m_BeltIntake.set(-maxSpeed);
-  }
-
-  // Stops the intake
-  public void stopMotor(){
-    m_BeltIntake.set(0);
+  public WPI_VictorSPX getIntakeMotor(){
+    return m_beltIntake;
   }
 
   @Override

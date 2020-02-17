@@ -31,14 +31,14 @@ public class LowerTheBoi extends CommandBase {
   @Override
   public void execute() {
     // Lowers to winch
-    m_lift.lowerWinch();
+    m_lift.getWinchMotor().set(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     // Stops the lift
-    m_lift.stopWinch();
+    m_lift.getWinchMotor().set(0);
   }
 
   // Returns true when the command should end.

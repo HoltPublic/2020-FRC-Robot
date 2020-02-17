@@ -78,4 +78,12 @@ public final class Constants {
     public static final class IntakeConstants{
         public static final int kBeltMotor = 7;
     }
+
+    public static final class ColorConstants{
+        public static final int kColorMotor = 8;
+        public static final int kEncoderCPR = 12;
+        public static final double kColorWheelDiameterInches = 32;
+        public static final double kSpinnerWheelDiameterInches = 3;
+        public static final double kTotalMechanicalAdvantage = kColorWheelDiameterInches / kSpinnerWheelDiameterInches;
+    }
 }

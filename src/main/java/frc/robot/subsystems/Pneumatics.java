@@ -9,7 +9,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PneumaticsConstants;
 
@@ -28,14 +27,8 @@ public class Pneumatics extends SubsystemBase {
     m_compressor.setClosedLoopControl(true);
   }
 
-  // Blocks the balls
-  public void stopBalls(){
-    m_ballStopper.set(Value.kForward);
-  }
-
-  // Unblock the balls
-  public void goBalls(){
-    m_ballStopper.set(Value.kReverse);
+  public DoubleSolenoid getGatePiston(){
+    return m_ballStopper;
   }
 
   @Override

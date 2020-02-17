@@ -30,14 +30,14 @@ public class LightSaborDown extends CommandBase {
   @Override
   public void execute() {
     // Lowers the telescope
-    m_lift.lowerTelescope();
+    m_lift.getTelescopeMotor().set(-0.8);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     // Stops the motor
-    m_lift.stopTelescope();
+    m_lift.getTelescopeMotor().set(0);
   }
 
   // Returns true when the command should end.

@@ -7,6 +7,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
@@ -14,8 +17,12 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ColorConstants;
 
 public class ColorSensor extends SubsystemBase {
+  // The Motor
+  private final WPI_TalonSRX m_colorMotor = new WPI_TalonSRX(ColorConstants.kColorMotor);
+
   // Makes the I2C port
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
@@ -38,6 +45,12 @@ public class ColorSensor extends SubsystemBase {
     m_colorMatcher.addColorMatch(kGreenTarget);
     m_colorMatcher.addColorMatch(kRedTarget);
     m_colorMatcher.addColorMatch(kYellowTarget);
+
+    // Sets the motor up
+    m_colorMotor.configFactoryDefault();
+    m_colorMotor.setInverted(false);
+    m_colorMotor.setNeutralMode(NeutralMode.Brake);
+    m_colorMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
   public String getColor(){
@@ -56,6 +69,14 @@ public class ColorSensor extends SubsystemBase {
     } else {
       return "Unknown";
     }
+  }
+
+  public double getTotalColorWheelSpins(){
+    return m_colorMotor.getSelectedSensorPosition() / ColorConstants.kEncoderCPR / ColorConstants.kTotalMechanicalAdvantage;
+  }
+
+  public WPI_TalonSRX getMotor(){
+    return m_colorMotor;
   }
 
   @Override

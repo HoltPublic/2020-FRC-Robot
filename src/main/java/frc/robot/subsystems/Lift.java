@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -16,10 +17,10 @@ import frc.robot.Constants.LiftConstants;
 
 public class Lift extends SubsystemBase {
   // Makes the climb motor
-  //private final WPI_VictorSPX m_climbMotor = new WPI_VictorSPX(LiftConstants.kClimbMotor);
+  private final WPI_VictorSPX m_winchMotor = new WPI_VictorSPX(LiftConstants.kClimbMotor);
 
   // Makes the telescope motor
-  public final WPI_TalonSRX m_telescope = new WPI_TalonSRX(LiftConstants.kTelescopeMotor);
+  public final WPI_TalonSRX m_telescopeMotor = new WPI_TalonSRX(LiftConstants.kTelescopeMotor);
 
   /**
    * Creates a new Lift.
@@ -27,54 +28,31 @@ public class Lift extends SubsystemBase {
   public Lift() {
     // Sets up the motors
     //m_climbMotor.configFactoryDefault();
-    m_telescope.configFactoryDefault();
+    m_telescopeMotor.configFactoryDefault();
 
     //m_climbMotor.setInverted(false);
-    m_telescope.setInverted(false);
+    m_telescopeMotor.setInverted(false);
 
     // Sets up the encoder
-    m_telescope.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    m_telescopeMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
   }
 
-  // Lifts the telescope
-  public void raiseTelescope(){
-    m_telescope.set(.2);
-    
+  public WPI_VictorSPX getWinchMotor(){
+    return m_winchMotor;
   }
 
-  // Lowers the telescope
-  public void lowerTelescope(){
-    m_telescope.set(-1);
-  }
-
-  // Stops the Telescope
-  public void stopTelescope(){
-    m_telescope.set(0);
+  public WPI_TalonSRX getTelescopeMotor(){
+    return m_telescopeMotor;
   }
 
   // Resets the encoder
   public void resetEncoder(){
-    m_telescope.setSelectedSensorPosition(0);
+    m_telescopeMotor.setSelectedSensorPosition(0);
   }
 
   // Gets the rotation from the encoder
   public double getRotation(){
-    return m_telescope.getSelectedSensorPosition() / LiftConstants.kEncoderCPR;
-  }
-
-  // Starts the motor to lift the robot
-  public void startWinch(){
-    //m_climbMotor.set(1);
-  }
-
-  // Starts the motor to lower the robot
-  public void lowerWinch(){
-    //m_climbMotor.set(-1);
-  }
-
-  // Stops the motor
-  public void stopWinch(){
-    //m_climbMotor.set(0);
+    return m_telescopeMotor.getSelectedSensorPosition() / LiftConstants.kEncoderCPR;
   }
 
   @Override

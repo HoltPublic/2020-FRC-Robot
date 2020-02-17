@@ -26,7 +26,7 @@ public class SpitOut extends CommandBase {
   @Override
   public void initialize() {
     // Turns on the intake
-    m_intake.spitTheBalls();
+    m_intake.getIntakeMotor().set(-0.8);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -38,7 +38,7 @@ public class SpitOut extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     // Stops the intake
-    m_intake.stopMotor();
+    m_intake.getIntakeMotor().set(0);
   }
 
   // Returns true when the command should end.

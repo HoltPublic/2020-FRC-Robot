@@ -7,6 +7,7 @@
 
 package frc.robot.commands.pneumatics;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Pneumatics;
 
@@ -25,7 +26,7 @@ public class BallPistion extends CommandBase {
   @Override
   public void initialize() {
     // Blocks the balls
-    m_blow.stopBalls();
+    m_blow.getGatePiston().set(Value.kForward);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,7 +38,7 @@ public class BallPistion extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     // Let the balls go through
-    m_blow.goBalls();
+    m_blow.getGatePiston().set(Value.kReverse);
   }
 
   // Returns true when the command should end.

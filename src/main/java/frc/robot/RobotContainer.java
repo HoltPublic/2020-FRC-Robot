@@ -50,7 +50,6 @@ import frc.robot.commands.lift.LightSaberUp;
 import frc.robot.commands.lift.LowerTheBoi;
 import frc.robot.commands.lift.RaiseTheBoi;
 import frc.robot.commands.pneumatics.BallPistion;
-import frc.robot.commands.colorsensor.GetColorName;
 
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveSubsystem;
@@ -107,7 +106,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Sets the default commands
     m_drive.setDefaultCommand(new DefaultDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
-    m_color.setDefaultCommand(new GetColorName(m_color));
     m_glow.setDefaultCommand(new TeleOPLights(m_glow));
     
     // More Trajectory stuff
@@ -119,7 +117,7 @@ public class RobotContainer {
     m_auto.addOption("Dump in Buddy", m_dumpInBuddy);
     m_auto.addOption("My Son", m_comeMySon);
     m_auto.addOption("Drive to Trench", m_driveToTrench);
-    m_chooser.addOption("Do Nothing", new WaitCommand(15));
+    m_auto.addOption("Do Nothing", new WaitCommand(15));
 
     // The songs you can choose
     m_song.setDefaultOption("Megalovania", "mega.chrp");
@@ -132,12 +130,12 @@ public class RobotContainer {
     // Settings for the cameras
     m_camera.setResolution(50, 50);
 
-    // Put the choosers and cameras on the dashboard
-    m_mainTab.add(m_auto).withSize(2, 1).withPosition(0, 0);
-    m_mainTab.add(m_song).withSize(2, 1).withPosition(0, 1);
-    m_mainTab.add(m_camera).withSize(3, 3).withPosition(2, 0);
-
-    m_mainTab.add(m_drive.getDrive()).withSize(3, 2).withPosition(5, 0);
+    // Put all the stuff on the Dashboard
+    m_mainTab.add("Auto Chooser", m_auto).withSize(2, 1).withPosition(0, 0);
+    m_mainTab.add("Song Chooser", m_song).withSize(2, 1).withPosition(0, 1);
+    m_mainTab.add("Camera", m_camera).withSize(3, 3).withPosition(2, 0);
+    m_mainTab.addString("Color Detected", () -> m_color.getColor()).withSize(2, 1).withPosition(3, 0);
+    m_mainTab.add("Drive", m_drive.getDrive()).withSize(3, 2).withPosition(5, 0);
 
     // Configure the button bindings
     configureButtonBindings();
