@@ -14,6 +14,7 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -77,6 +78,22 @@ public class ColorSensor extends SubsystemBase {
 
   public WPI_TalonSRX getMotor(){
     return m_colorMotor;
+  }
+
+  public String getGameData(){
+    String gameData = DriverStation.getInstance().getGameSpecificMessage();
+
+    if(gameData.length() > 0){
+      switch(gameData){
+        case "B" : return "R";
+        case "G" : return "Y";
+        case "R" : return "B";
+        case "Y" : return "G";
+        default : return "X";
+      }
+    } else{
+      return "X";
+    }
   }
 
   @Override
