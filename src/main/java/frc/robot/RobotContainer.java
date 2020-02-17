@@ -158,8 +158,6 @@ public class RobotContainer {
     // When holding button the Winch will spin backwards
     new JoystickButton(m_driverController, Button.kBack.value).whenHeld(new LowerTheBoi(m_lift));
 
-    new JoystickButton(m_driverController, Button.kA.value).whenPressed(new LightSaberUp(m_lift));
-    
     /*  Operator Controls */
     // When the trigger is pressed block the balls
     new JoystickButton(m_operatorController, 1).whenHeld(new BallPistion(m_blow));
@@ -169,6 +167,7 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, 5).whenHeld(new SpitOut(m_intake));
     // When button is pressed lift the robot
     new JoystickButton(m_operatorController, 16).whenHeld(new RaiseTheBoi(m_lift));
+    // TODO: Add buttons to do new commands
   }
 
   public Command getAutonLights(){

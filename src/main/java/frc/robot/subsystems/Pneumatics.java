@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PneumaticsConstants;
 
@@ -18,6 +19,9 @@ public class Pneumatics extends SubsystemBase {
 
   // Makes the Double Solenoid
   private final DoubleSolenoid m_ballStopper = new DoubleSolenoid(PneumaticsConstants.kBallStopperForward, PneumaticsConstants.kBallStopperBackward);
+  private final Solenoid m_colorMotor = new Solenoid(PneumaticsConstants.kColorMotor);
+
+  private boolean m_toggle = false;
 
   /**
    * Creates a new Pneumatics.
@@ -29,6 +33,11 @@ public class Pneumatics extends SubsystemBase {
 
   public DoubleSolenoid getGatePiston(){
     return m_ballStopper;
+  }
+
+  public void toggleColorSolenoid(){
+    m_toggle = !m_toggle;
+    m_colorMotor.set(m_toggle);
   }
 
   @Override

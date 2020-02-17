@@ -65,6 +65,7 @@ public final class Constants {
     public static final class PneumaticsConstants{
         public static final int kBallStopperForward = 0;
         public static final int kBallStopperBackward = 1;
+        public static final int kColorMotor = 2;
     }
 
     public static final class LiftConstants{
@@ -72,7 +73,7 @@ public final class Constants {
         public static final int kTelescopeMotor = 6;
 
         public static final int kEncoderCPR = 2048;
-        public static final double kRotationsToGoUp = 100;
+        public static final double kRotationsToGoUp = 10;
     }
 
     public static final class IntakeConstants{
