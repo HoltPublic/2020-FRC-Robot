@@ -27,10 +27,10 @@ public class Lift extends SubsystemBase {
    */
   public Lift() {
     // Sets up the motors
-    //m_climbMotor.configFactoryDefault();
+    m_winchMotor.configFactoryDefault();
     m_telescopeMotor.configFactoryDefault();
 
-    //m_climbMotor.setInverted(false);
+    m_winchMotor.setInverted(true);
     m_telescopeMotor.setInverted(false);
 
     // Sets up the encoder

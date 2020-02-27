@@ -27,6 +27,7 @@ public class StartMusic extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    //m_drive.stopDrive();
     m_drive.getOrchestra().loadMusic(m_song);
   }
 
@@ -39,12 +40,13 @@ public class StartMusic extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.getOrchestra().stop();
+    //m_drive.getOrchestra().stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !m_drive.getOrchestra().isPlaying();
+    //return !m_drive.getOrchestra().isPlaying();
+    return false;
   }
 }

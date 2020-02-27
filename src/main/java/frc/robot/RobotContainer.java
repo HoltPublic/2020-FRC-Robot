@@ -34,13 +34,15 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
-
-import frc.robot.commands.drive.DefaultDrive;
+import frc.robot.commands.colorsensor.ColorControl;
+import frc.robot.commands.colorsensor.RotationControl;
+import frc.robot.commands.drive.ArcadeDrive;
 import frc.robot.commands.drive.DriveBackDistance;
 import frc.robot.commands.drive.DriveForwardDistance;
 import frc.robot.commands.drive.FlipDrive;
 import frc.robot.commands.drive.HalveDriveSpeed;
-import frc.robot.commands.drive.StartMusic;
+import frc.robot.commands.drive.MaxSpeed;
+import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.drive.TurnAngleRight;
 import frc.robot.commands.intake.SpitOut;
 import frc.robot.commands.intake.SuckIn;
@@ -49,7 +51,7 @@ import frc.robot.commands.leds.TeleOPLights;
 import frc.robot.commands.lift.LowerTheBoi;
 import frc.robot.commands.lift.RaiseTheBoi;
 import frc.robot.commands.pneumatics.BallPistion;
-
+import frc.robot.commands.pneumatics.RaiseColorMotor;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
@@ -79,15 +81,15 @@ public class RobotContainer {
   // Different types of auto commands
   private final Command m_driveDistanceAuto = new DriveForwardDistance(AutoConstants.kDriveGetOffLineInches, AutoConstants.kDriveSpeed, m_drive);
   private final Command m_driveToDump = new SequentialCommandGroup(new DriveBackDistance(AutoConstants.kDriveToDumpInches, AutoConstants.kDriveSpeed, m_drive), new SuckIn(m_intake).withTimeout(5));
-  private final Command m_dumpInBuddy = new SequentialCommandGroup(new WaitCommand(AutoConstants.kDumpToBuddySeconds), new SpitOut(m_intake).withTimeout(5));
+  private final Command m_dumpInBuddy = new SequentialCommandGroup(new WaitCommand(AutoConstants.kDumpToBuddySeconds), new SpitOut(m_intake).withTimeout(3));
   private final Command m_comeMySon = new SequentialCommandGroup(new DriveForwardDistance(120, .5, m_drive), new TurnAngleRight(180, .5, m_drive), new DriveForwardDistance(120, .5, m_drive));
   private final Command m_driveToTrench = getRamCommand("DriveToTrench.wpilib.json");
 
   // A chooser for auto commands
   private final SendableChooser<Command> m_auto = new SendableChooser<>();
 
-  // A chooser for the song
-  private final SendableChooser<String> m_song = new SendableChooser<>();
+  // A chooser for type of drive
+  private final SendableChooser<Command> m_driveType = new SendableChooser<>();
 
   // Controllers
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -103,10 +105,6 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Sets the default commands
-    m_drive.setDefaultCommand(new DefaultDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
-    m_glow.setDefaultCommand(new TeleOPLights(m_glow));
-    
     // More Trajectory stuff
     m_config.setKinematics(m_drive.getKinematics());
 
@@ -118,22 +116,21 @@ public class RobotContainer {
     m_auto.addOption("Drive to Trench", m_driveToTrench);
     m_auto.addOption("Do Nothing", new WaitCommand(15));
 
-    // The songs you can choose
-    m_song.setDefaultOption("Megalovania", "mega.chrp");
-    m_song.addOption("Turret Song", "turret.chrp");
-    m_song.addOption("Renai Circulation", "renai.chrp");
-    m_song.addOption("Servant of Evil", "servant.chrp");
-    m_song.addOption("Flamingo", "flamingo.chrp");
-    m_song.addOption("Star Spangled Banner", "star.chrp");
+    m_driveType.setDefaultOption("Tank Drive", new TankDrive(() -> -m_driverController.getY(GenericHID.Hand.kRight), () -> -m_driverController.getY(GenericHID.Hand.kLeft), m_drive));
+    m_driveType.addOption("Arcade Drive", new ArcadeDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
+
+    // Sets the default commands
+    m_drive.setDefaultCommand(m_driveType.getSelected());
+    m_glow.setDefaultCommand(new TeleOPLights(m_glow));
 
     // Settings for the cameras
     m_camera.setResolution(50, 50);
 
     // Put all the stuff on the Dashboard
     m_mainTab.add("Auto Chooser", m_auto).withSize(2, 1).withPosition(0, 0);
-    m_mainTab.add("Song Chooser", m_song).withSize(2, 1).withPosition(0, 1);
+    m_mainTab.add("Drive Chooser", m_driveType).withSize(2, 1).withPosition(0, 1);
     m_mainTab.add("Camera", m_camera).withSize(3, 3).withPosition(2, 0);
-    m_mainTab.addString("Color Detected", () -> m_color.getColor()).withSize(2, 1).withPosition(3, 0);
+    m_mainTab.add("Color Detected", m_color.getColor()).withSize(2, 1).withPosition(0, 2);
     m_mainTab.add("Drive", m_drive.getDrive()).withSize(3, 2).withPosition(5, 0);
 
     // Configure the button bindings
@@ -152,8 +149,6 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new HalveDriveSpeed(m_drive));
     // While holding the other Shoulder Button it flips the front
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new FlipDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
-    // When button is pressed music will play from falcons
-    new JoystickButton(m_driverController, Button.kA.value).whenPressed(new StartMusic(m_song.getSelected(), m_drive));
     // When holding button the Winch will spin backwards
     new JoystickButton(m_driverController, Button.kBack.value).whenHeld(new LowerTheBoi(m_lift));
 
@@ -161,12 +156,17 @@ public class RobotContainer {
     // When the trigger is pressed block the balls
     new JoystickButton(m_operatorController, 1).whenHeld(new BallPistion(m_blow));
     // When button is pressed starts the intake
-    new JoystickButton(m_operatorController, 6).whenHeld(new SuckIn(m_intake));
+    new JoystickButton(m_operatorController, 5).whenHeld(new SuckIn(m_intake));
     // When button is pressed reverses the intake
-    new JoystickButton(m_operatorController, 5).whenHeld(new SpitOut(m_intake));
+    new JoystickButton(m_operatorController, 6).whenHeld(new SpitOut(m_intake));
     // When button is pressed lift the robot
     new JoystickButton(m_operatorController, 16).whenHeld(new RaiseTheBoi(m_lift));
-    // TODO: Add buttons to do new commands
+    // When button is pressed the color wheel pistion will toggle
+    new JoystickButton(m_operatorController, 2).whenPressed(new RaiseColorMotor(m_blow));
+    // When button is pressed the color wheel will do rotation control
+    new JoystickButton(m_operatorController, 13).whileHeld(new RotationControl(m_color));
+    // When button is pressed the color wheel will do color control
+    new JoystickButton(m_operatorController, 14).whileHeld(new ColorControl(m_color));
   }
 
   public Command getAutonLights(){
@@ -204,5 +204,9 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return m_auto.getSelected();
+  }
+
+  public Command getMaxSpeed(){
+    return new MaxSpeed(m_mainTab, m_drive);
   }
 }

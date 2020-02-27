@@ -98,6 +98,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.arcadeDrive(fwd, rot);
   }
 
+  public void tankDrive(double leftSpeed, double rightSpeed){
+    m_drive.tankDrive(leftSpeed, rightSpeed);
+  }
+
   // Sets the Max seed of the robot
   public void setMaxOutput(double maxOutput) {
     m_drive.setMaxOutput(maxOutput);
@@ -136,6 +140,10 @@ public class DriveSubsystem extends SubsystemBase {
   public void resetEncoders(){
     m_rightMaster.setSelectedSensorPosition(0);
     m_leftMaster.setSelectedSensorPosition(0);
+  }
+
+  public AHRS getNavX(){
+    return m_navX;
   }
 
   // Returns the angle of the gyro

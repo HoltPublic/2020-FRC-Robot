@@ -5,21 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.lift;
+package frc.robot.commands.drive;
+
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Lift;
+import frc.robot.subsystems.DriveSubsystem;
 
-public class LowerTheBoi extends CommandBase {
-  private final Lift m_lift;
-
+public class TankDrive extends CommandBase {
+  private final DriveSubsystem m_drive;
+  private final DoubleSupplier m_rightSpeed;
+  private final DoubleSupplier m_leftSpeed;
   /**
-   * Creates a new LowerTheBoi.
+   * Creates a new TankDrive.
    */
-  public LowerTheBoi(Lift lift) {
+  public TankDrive(DoubleSupplier rightSpeed, DoubleSupplier leftSpeed, DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_lift = lift;
-    addRequirements(m_lift);
+    m_rightSpeed = rightSpeed;
+    m_leftSpeed = leftSpeed;
+    m_drive = drive;
+    addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
@@ -30,15 +35,13 @@ public class LowerTheBoi extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Lowers to winch
-    m_lift.getWinchMotor().set(-1);
+    m_drive.tankDrive(m_leftSpeed.getAsDouble(), m_rightSpeed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // Stops the lift
-    m_lift.getWinchMotor().set(0);
+    m_drive.stopDrive();
   }
 
   // Returns true when the command should end.

@@ -98,6 +98,8 @@ public class Robot extends TimedRobot {
     if (m_autonLights != null) {
       m_autonLights.cancel();
     }
+
+    //m_robotContainer.getMaxSpeed().schedule();
   }
 
   /**

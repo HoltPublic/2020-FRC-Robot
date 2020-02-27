@@ -12,7 +12,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class DefaultDrive extends CommandBase {
+public class ArcadeDrive extends CommandBase {
   private final DriveSubsystem m_drive;
   private final DoubleSupplier m_forward;
   private final DoubleSupplier m_rotation;
@@ -20,7 +20,7 @@ public class DefaultDrive extends CommandBase {
   /**
    * Creates a new DefaultDrive.
    */
-  public DefaultDrive(DoubleSupplier forward, DoubleSupplier rotation, DriveSubsystem drive) {
+  public ArcadeDrive(DoubleSupplier forward, DoubleSupplier rotation, DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_forward = forward;

@@ -26,7 +26,7 @@ public class SpitOut extends CommandBase {
   @Override
   public void initialize() {
     // Turns on the intake
-    m_intake.getIntakeMotor().set(-0.8);
+    m_intake.getIntakeMotor().set(0.8);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

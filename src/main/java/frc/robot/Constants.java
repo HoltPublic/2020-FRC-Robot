@@ -46,7 +46,7 @@ public final class Constants {
         public static final double kDriveDistanceSeconds = 4;
         public static final double kDriveGetOffLineInches = 120;
         public static final double kDriveToDumpInches = 110;
-        public static final double kDumpToBuddySeconds = 10;
+        public static final double kDumpToBuddySeconds = 3;
 
         //TODO: Change theses for our robot
         public static final double kMaxSpeedMetersPerSec = 2;
