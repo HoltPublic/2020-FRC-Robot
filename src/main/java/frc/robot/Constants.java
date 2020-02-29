@@ -73,7 +73,9 @@ public final class Constants {
         public static final int kTelescopeMotor = 6;
 
         public static final int kEncoderCPR = 2048;
-        public static final double kRotationsToGoUp = 10;
+        public static final double kTelescopeSpeedUp = 0.2;
+        public static final double kTelescopeSpeedDown = 0.1;
+        public static final double kRotationsToGoUp = 12;
     }
 
     public static final class IntakeConstants{

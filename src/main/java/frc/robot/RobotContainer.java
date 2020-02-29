@@ -41,13 +41,13 @@ import frc.robot.commands.drive.DriveBackDistance;
 import frc.robot.commands.drive.DriveForwardDistance;
 import frc.robot.commands.drive.FlipDrive;
 import frc.robot.commands.drive.HalveDriveSpeed;
-import frc.robot.commands.drive.MaxSpeed;
-import frc.robot.commands.drive.TankDrive;
 import frc.robot.commands.drive.TurnAngleRight;
 import frc.robot.commands.intake.SpitOut;
 import frc.robot.commands.intake.SuckIn;
 import frc.robot.commands.leds.AutonLights;
 import frc.robot.commands.leds.TeleOPLights;
+import frc.robot.commands.lift.LightSaberUp;
+import frc.robot.commands.lift.LightSaborDown;
 import frc.robot.commands.lift.LowerTheBoi;
 import frc.robot.commands.lift.RaiseTheBoi;
 import frc.robot.commands.pneumatics.BallPistion;
@@ -60,10 +60,11 @@ import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Underglow;
 
 /**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in the {@link Robot} periodic methods (other than the
+ * scheduler calls). Instead, the structure of the robot (including subsystems,
+ * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems
@@ -73,36 +74,38 @@ public class RobotContainer {
   private final Pneumatics m_blow = new Pneumatics();
   private final Intake m_intake = new Intake();
   private final Lift m_lift = new Lift();
-  
+
   // Trajectory stuff
   private final TrajectoryConfig m_config = new TrajectoryConfig(Units.feetToMeters(2), Units.feetToMeters(2));
-  
 
   // Different types of auto commands
-  private final Command m_driveDistanceAuto = new DriveForwardDistance(AutoConstants.kDriveGetOffLineInches, AutoConstants.kDriveSpeed, m_drive);
-  private final Command m_driveToDump = new SequentialCommandGroup(new DriveBackDistance(AutoConstants.kDriveToDumpInches, AutoConstants.kDriveSpeed, m_drive), new SuckIn(m_intake).withTimeout(5));
-  private final Command m_dumpInBuddy = new SequentialCommandGroup(new WaitCommand(AutoConstants.kDumpToBuddySeconds), new SpitOut(m_intake).withTimeout(3));
-  private final Command m_comeMySon = new SequentialCommandGroup(new DriveForwardDistance(120, .5, m_drive), new TurnAngleRight(180, .5, m_drive), new DriveForwardDistance(120, .5, m_drive));
+  private final Command m_driveDistanceAuto = new DriveForwardDistance(AutoConstants.kDriveGetOffLineInches,
+      AutoConstants.kDriveSpeed, m_drive);
+  private final Command m_driveToDump = new SequentialCommandGroup(
+      new DriveBackDistance(AutoConstants.kDriveToDumpInches, AutoConstants.kDriveSpeed, m_drive),
+      new BallPistion(m_blow).withTimeout(5));
+  private final Command m_dumpInBuddy = new SequentialCommandGroup(new WaitCommand(AutoConstants.kDumpToBuddySeconds),
+      new SpitOut(m_intake).withTimeout(3));
+  private final Command m_comeMySon = new SequentialCommandGroup(new DriveForwardDistance(120, .5, m_drive),
+      new TurnAngleRight(180, .5, m_drive), new DriveForwardDistance(120, .5, m_drive));
   private final Command m_driveToTrench = getRamCommand("DriveToTrench.wpilib.json");
 
   // A chooser for auto commands
   private final SendableChooser<Command> m_auto = new SendableChooser<>();
-
-  // A chooser for type of drive
-  private final SendableChooser<Command> m_driveType = new SendableChooser<>();
 
   // Controllers
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final Joystick m_operatorController = new Joystick(OIConstants.kOperatorContollerPort);
 
   // Cameras
-  private final UsbCamera m_camera = CameraServer.getInstance().startAutomaticCapture();
+  private final UsbCamera m_frontCamera = CameraServer.getInstance().startAutomaticCapture(0);
+  private final UsbCamera m_backCamera = CameraServer.getInstance().startAutomaticCapture(1);
 
   // Tab for Shuffleboard
   private final ShuffleboardTab m_mainTab = Shuffleboard.getTab("Main Tab");
 
   /**
-   * The container for the robot.  Contains subsystems, OI devices, and commands.
+   * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // More Trajectory stuff
@@ -116,43 +119,44 @@ public class RobotContainer {
     m_auto.addOption("Drive to Trench", m_driveToTrench);
     m_auto.addOption("Do Nothing", new WaitCommand(15));
 
-    m_driveType.setDefaultOption("Tank Drive", new TankDrive(() -> -m_driverController.getY(GenericHID.Hand.kRight), () -> -m_driverController.getY(GenericHID.Hand.kLeft), m_drive));
-    m_driveType.addOption("Arcade Drive", new ArcadeDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
 
     // Sets the default commands
-    m_drive.setDefaultCommand(m_driveType.getSelected());
+    m_drive.setDefaultCommand(new ArcadeDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
     m_glow.setDefaultCommand(new TeleOPLights(m_glow));
 
     // Settings for the cameras
-    m_camera.setResolution(50, 50);
+    //m_frontCamera.setResolution(50, 50);
 
     // Put all the stuff on the Dashboard
     m_mainTab.add("Auto Chooser", m_auto).withSize(2, 1).withPosition(0, 0);
-    m_mainTab.add("Drive Chooser", m_driveType).withSize(2, 1).withPosition(0, 1);
-    m_mainTab.add("Camera", m_camera).withSize(3, 3).withPosition(2, 0);
+    m_mainTab.add("Front Camera", m_frontCamera).withSize(3, 3).withPosition(2, 0);
+    m_mainTab.add("Back Camera", m_backCamera).withSize(3, 3).withPosition(5, 0);
     m_mainTab.add("Color Detected", m_color.getColor()).withSize(2, 1).withPosition(0, 2);
-    m_mainTab.add("Drive", m_drive.getDrive()).withSize(3, 2).withPosition(5, 0);
+    //m_mainTab.add("Drive", m_drive.getDrive()).withSize(3, 2).withPosition(5, 0);
+    m_mainTab.add("Rotations", m_lift.getRotation());
 
     // Configure the button bindings
     configureButtonBindings();
   }
 
   /**
-   * Use this method to define your button->command mappings.  Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
-   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    /*  Driver Controls */
+    /* Driver Controls */
     // While holding the Shoulder Button drive slow
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new HalveDriveSpeed(m_drive));
     // While holding the other Shoulder Button it flips the front
-    new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new FlipDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft), () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
+    new JoystickButton(m_driverController, Button.kBumperRight.value)
+        .whenHeld(new FlipDrive(() -> -m_driverController.getY(GenericHID.Hand.kLeft),
+            () -> m_driverController.getX(GenericHID.Hand.kLeft), m_drive));
     // When holding button the Winch will spin backwards
     new JoystickButton(m_driverController, Button.kBack.value).whenHeld(new LowerTheBoi(m_lift));
 
-    /*  Operator Controls */
+    /* Operator Controls */
     // When the trigger is pressed block the balls
     new JoystickButton(m_operatorController, 1).whenHeld(new BallPistion(m_blow));
     // When button is pressed starts the intake
@@ -167,6 +171,10 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, 13).whileHeld(new RotationControl(m_color));
     // When button is pressed the color wheel will do color control
     new JoystickButton(m_operatorController, 14).whileHeld(new ColorControl(m_color));
+    // When button is pressed the telescope will go up
+    new JoystickButton(m_operatorController, 9).whenPressed(new LightSaberUp(m_lift));
+    // WHen button is pressed the telescope will go down
+    new JoystickButton(m_operatorController, 8).whenPressed(new LightSaborDown(m_lift));
   }
 
   public Command getAutonLights(){
@@ -204,9 +212,5 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return m_auto.getSelected();
-  }
-
-  public Command getMaxSpeed(){
-    return new MaxSpeed(m_mainTab, m_drive);
   }
 }

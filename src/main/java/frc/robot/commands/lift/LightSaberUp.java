@@ -34,7 +34,7 @@ public class LightSaberUp extends CommandBase {
   @Override
   public void execute() {
     //lifts the telecope
-    m_lift.getTelescopeMotor().set(0.8);
+    m_lift.getTelescopeMotor().set(LiftConstants.kTelescopeSpeedUp);
   }
 
   // Called once the command ends or is interrupted.

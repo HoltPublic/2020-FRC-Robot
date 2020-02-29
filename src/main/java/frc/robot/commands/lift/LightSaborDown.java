@@ -8,6 +8,7 @@
 package frc.robot.commands.lift;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.LiftConstants;
 import frc.robot.subsystems.Lift;
 
 public class LightSaborDown extends CommandBase {
@@ -30,7 +31,7 @@ public class LightSaborDown extends CommandBase {
   @Override
   public void execute() {
     // Lowers the telescope
-    m_lift.getTelescopeMotor().set(-0.8);
+    m_lift.getTelescopeMotor().set(-LiftConstants.kTelescopeSpeedDown);
   }
 
   // Called once the command ends or is interrupted.

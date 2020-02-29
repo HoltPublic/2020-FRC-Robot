@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
@@ -32,6 +33,8 @@ public class Lift extends SubsystemBase {
 
     m_winchMotor.setInverted(true);
     m_telescopeMotor.setInverted(false);
+
+    m_winchMotor.setNeutralMode(NeutralMode.Brake);
 
     // Sets up the encoder
     m_telescopeMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
