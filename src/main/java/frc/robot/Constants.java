@@ -45,7 +45,7 @@ public final class Constants {
         public static final double kDriveSpeed = .5;
         public static final double kDriveDistanceSeconds = 4;
         public static final double kDriveGetOffLineInches = 120;
-        public static final double kDriveToDumpInches = 110;
+        public static final double kDriveToDumpInches = 60;
         public static final double kDumpToBuddySeconds = 3;
 
         //TODO: Change theses for our robot
@@ -73,9 +73,9 @@ public final class Constants {
         public static final int kTelescopeMotor = 6;
 
         public static final int kEncoderCPR = 2048;
-        public static final double kTelescopeSpeedUp = 0.2;
+        public static final double kTelescopeSpeedUp = 0.3;
         public static final double kTelescopeSpeedDown = 0.1;
-        public static final double kRotationsToGoUp = 12;
+        public static final double kRotationsToGoUp = 11;
     }
 
     public static final class IntakeConstants{

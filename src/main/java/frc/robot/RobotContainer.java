@@ -34,8 +34,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.colorsensor.ColorControl;
-import frc.robot.commands.colorsensor.RotationControl;
+//import frc.robot.commands.colorsensor.ColorControl;
+//import frc.robot.commands.colorsensor.RotationControl;
 import frc.robot.commands.drive.ArcadeDrive;
 import frc.robot.commands.drive.DriveBackDistance;
 import frc.robot.commands.drive.DriveForwardDistance;
@@ -52,7 +52,7 @@ import frc.robot.commands.lift.LowerTheBoi;
 import frc.robot.commands.lift.RaiseTheBoi;
 import frc.robot.commands.pneumatics.BallPistion;
 import frc.robot.commands.pneumatics.RaiseColorMotor;
-import frc.robot.subsystems.ColorSensor;
+//import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
@@ -69,7 +69,7 @@ import frc.robot.subsystems.Underglow;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_drive = new DriveSubsystem();
-  private final ColorSensor m_color = new ColorSensor();
+  //private final ColorSensor m_color = new ColorSensor();
   private final Underglow m_glow = new Underglow();
   private final Pneumatics m_blow = new Pneumatics();
   private final Intake m_intake = new Intake();
@@ -131,7 +131,7 @@ public class RobotContainer {
     m_mainTab.add("Auto Chooser", m_auto).withSize(2, 1).withPosition(0, 0);
     m_mainTab.add("Front Camera", m_frontCamera).withSize(3, 3).withPosition(2, 0);
     m_mainTab.add("Back Camera", m_backCamera).withSize(3, 3).withPosition(5, 0);
-    m_mainTab.add("Color Detected", m_color.getColor()).withSize(2, 1).withPosition(0, 2);
+    //m_mainTab.add("Color Detected", m_color.getColor()).withSize(2, 1).withPosition(0, 2);
     //m_mainTab.add("Drive", m_drive.getDrive()).withSize(3, 2).withPosition(5, 0);
     m_mainTab.add("Rotations", m_lift.getRotation());
 
@@ -168,9 +168,9 @@ public class RobotContainer {
     // When button is pressed the color wheel pistion will toggle
     new JoystickButton(m_operatorController, 2).whenPressed(new RaiseColorMotor(m_blow));
     // When button is pressed the color wheel will do rotation control
-    new JoystickButton(m_operatorController, 13).whileHeld(new RotationControl(m_color));
+    //new JoystickButton(m_operatorController, 13).whileHeld(new RotationControl(m_color));
     // When button is pressed the color wheel will do color control
-    new JoystickButton(m_operatorController, 14).whileHeld(new ColorControl(m_color));
+    //new JoystickButton(m_operatorController, 14).whileHeld(new ColorControl(m_color));
     // When button is pressed the telescope will go up
     new JoystickButton(m_operatorController, 9).whenPressed(new LightSaberUp(m_lift));
     // WHen button is pressed the telescope will go down

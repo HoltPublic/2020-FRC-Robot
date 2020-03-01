@@ -52,6 +52,6 @@ public class DriveBackDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(-m_drive.getDistanceInches()) >= m_distance;
+    return Math.abs(-m_drive.getDistanceInches()) <= m_distance;
   }
 }
